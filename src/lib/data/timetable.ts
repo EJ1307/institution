@@ -21,10 +21,13 @@ function build(): Timetable {
   const r = new Rng("amaltas-timetable-v1");
   const all = staff();
   const busy = new Map<string, Set<string>>(); // teacherId → "d-p"
-  const isFree = (t: string, d: number, p: number) => !busy.get(t)?.has(`${d}-${p}`);
+  const dayLoad = new Map<string, number>(); // teacherId|day → lessons
+  const MAX_PER_DAY = 6;
+  const isFree = (t: string, d: number, p: number) => !busy.get(t)?.has(`${d}-${p}`) && (dayLoad.get(`${t}|${d}`) ?? 0) < MAX_PER_DAY;
   const book = (t: string, d: number, p: number) => {
     if (!busy.has(t)) busy.set(t, new Set());
     busy.get(t)!.add(`${d}-${p}`);
+    dayLoad.set(`${t}|${d}`, (dayLoad.get(`${t}|${d}`) ?? 0) + 1);
   };
   const load = new Map<string, number>();
 

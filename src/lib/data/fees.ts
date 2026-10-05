@@ -5,7 +5,7 @@ import { hash01 } from "@/lib/rng";
 import { getState } from "@/lib/store";
 import { academicYear, addDays, today } from "./calendar";
 import { INSTALMENTS, TRANSPORT_QUARTERLY, annualTuition, instalmentDue, type InstalmentId } from "./school";
-import { students, type Student } from "./people";
+import { PERSONA_PARENT, students, type Student } from "./people";
 
 export const PAYMENT_MODES = ["UPI", "Net banking", "Card", "Cheque", "Cash"] as const;
 export type PaymentMode = (typeof PAYMENT_MODES)[number];
@@ -53,6 +53,9 @@ function pickMode(key: string): PaymentMode {
 }
 
 function payDate(s: Student, insId: string, due: Date): Date | null {
+  // The demo parent pays on the due date itself, so there's usually an open
+  // instalment to walk through the "Pay now" flow with.
+  if (s.parentId === PERSONA_PARENT.id) return due;
   const h = hash01("pay", s.id, insId);
   if (s.feeProfile === "punctual") return addDays(due, -Math.floor(h * 22));
   if (s.feeProfile === "late") return addDays(due, 3 + Math.floor(h * 38));
