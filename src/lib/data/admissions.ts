@@ -49,7 +49,8 @@ let cache: { key: string; list: Application[] } | null = null;
 
 export function applications(): Application[] {
   const overrides = getState().admissionStages;
-  const key = JSON.stringify(overrides) + today().getTime();
+  const added = getState().newEnquiries ?? [];
+  const key = JSON.stringify(overrides) + today().getTime() + "|" + added.length;
   if (cache?.key === key) return cache.list;
 
   const r = new Rng("amaltas-admissions-v1");
@@ -90,6 +91,17 @@ export function applications(): Application[] {
       counsellor: counsellors.length ? `${counsellors[i % counsellors.length].title} ${counsellors[i % counsellors.length].name}` : "Admissions office",
       sibling: r.chance(0.14),
       score: progress >= 3 ? r.int(62, 98) : null,
+    });
+  }
+  // enquiries added in the demo (Admissions → New enquiry)
+  for (const e of added) {
+    const stage = (overrides[e.id] as AdmissionStage) ?? "Enquiry";
+    const created = new Date(e.createdOn);
+    list.push({
+      id: e.id, child: e.child, gender: e.gender, dob: new Date(e.dob), grade: e.grade as GradeId, parent: e.parent, phone: e.phone,
+      locality: e.locality, source: e.source as Application["source"], stage, createdOn: created, lastActivity: created,
+      nextStep: NEXT[stage], counsellor: counsellors.length ? `${counsellors[0].title} ${counsellors[0].name}` : "Admissions office",
+      sibling: e.sibling, score: null,
     });
   }
   list.sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime());

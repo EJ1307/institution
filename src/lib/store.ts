@@ -51,6 +51,35 @@ export type PostedHomework = {
   setBy: string;
 };
 
+/** An admissions enquiry added from the demo (Admissions → New enquiry). */
+export type StoredEnquiry = {
+  id: string;
+  child: string;
+  gender: "F" | "M";
+  dob: string; // ISO date
+  grade: string;
+  parent: string;
+  phone: string;
+  email: string;
+  locality: string;
+  source: string;
+  sibling: boolean;
+  createdOn: string; // ISO datetime
+};
+
+export type AdmissionNote = { text: string; at: string; by: string };
+
+/** School-level settings edited in Settings (identity colours live in brand.ts). */
+export type SchoolSettings = {
+  profile?: Record<string, string>;
+  /** "eventId|channel" → enabled */
+  notifications?: Record<string, boolean>;
+  /** integrationId → connected */
+  integrations?: Record<string, boolean>;
+  twoFactor?: boolean;
+  sessionTimeout?: string;
+};
+
 /** A parent's leave application for their child. */
 export type StudentLeave = {
   id: string;
@@ -77,6 +106,12 @@ export type AppState = {
   leaveDecisions: Record<string, "approved" | "declined">;
   /** applicationId → stage */
   admissionStages: Record<string, string>;
+  /** enquiries added in the demo */
+  newEnquiries: StoredEnquiry[];
+  /** applicationId → counsellor notes */
+  admissionNotes: Record<string, AdmissionNote[]>;
+  /** leaveId → substitute teacher chosen when approving */
+  leaveSubstitutes: Record<string, string>;
   /** homeworkId → submitted (parent view) */
   homeworkDone: Record<string, boolean>;
   /** studentId → reminder sent at (fees) */
@@ -105,6 +140,8 @@ export type AppState = {
   substitutions: Record<string, string>;
   /** studentId|isoDate → reported at: parent says the child won't take the bus that day */
   busAbsence: Record<string, string>;
+  /** Settings → school profile, notification channels, integrations, security */
+  settings: SchoolSettings;
 };
 
 const KEY = "kaksha.demo.v1";
@@ -118,6 +155,9 @@ const initial: AppState = {
   acks: {},
   leaveDecisions: {},
   admissionStages: {},
+  newEnquiries: [],
+  admissionNotes: {},
+  leaveSubstitutes: {},
   homeworkDone: {},
   reminders: {},
   readNotifications: {},
@@ -132,6 +172,7 @@ const initial: AppState = {
   reportCardsPublished: {},
   substitutions: {},
   busAbsence: {},
+  settings: {},
 };
 
 let state: AppState = initial;
