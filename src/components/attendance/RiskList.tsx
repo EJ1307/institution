@@ -176,7 +176,9 @@ export function RiskList() {
                   </Td>
                   <Td>
                     <div className="flex items-center gap-2.5">
-                      <Meter value={sum.rate} tone={sum.rate < 0.75 ? "bad" : "warn"} className="w-16 shrink-0" label={`${s.firstName}'s attendance`} />
+                      <span className="w-16 shrink-0">
+                        <Meter value={sum.rate} tone={sum.rate < 0.75 ? "bad" : "warn"} label={`${s.firstName}'s attendance`} />
+                      </span>
                       <span className={cn("tnum font-semibold", sum.rate < 0.75 ? "text-bad" : "text-warn")}>{percent(sum.rate)}</span>
                     </div>
                   </Td>

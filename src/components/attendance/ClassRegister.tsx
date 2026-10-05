@@ -197,7 +197,9 @@ export function ClassRegister({ classKey, day }: { classKey: string; day: Date }
                   </Td>
                   <Td>
                     <div className="flex items-center gap-2.5">
-                      <Meter value={term.rate} tone={tone === "good" ? "brand" : tone} className="w-20 shrink-0" label={`${s.firstName}'s attendance this term`} />
+                      <span className="w-20 shrink-0">
+                        <Meter value={term.rate} tone={tone === "good" ? "brand" : tone} label={`${s.firstName}'s attendance this term`} />
+                      </span>
                       <span className={cn("tnum text-[13px] font-semibold", tone === "bad" ? "text-bad" : tone === "warn" ? "text-warn" : "text-ink")}>{percent(term.rate)}</span>
                     </div>
                   </Td>

@@ -154,7 +154,9 @@ export function TeacherAttendance() {
                     <span className="text-[13px] font-medium text-ink">{i === 0 ? "Today" : fmtWeekday(d).split(",")[0] + ", " + d.getDate()}</span>
                     {marked ? (
                       <span className="flex items-center gap-2 text-[12px] text-muted">
-                        <Meter value={c.rate} tone={c.rate < 0.85 ? "warn" : "brand"} className="w-16 shrink-0" label={`Attendance ${fmtWeekday(d)}`} />
+                        <span className="w-16 shrink-0">
+                          <Meter value={c.rate} tone={c.rate < 0.85 ? "warn" : "brand"} label={`Attendance ${fmtWeekday(d)}`} />
+                        </span>
                         <span className="tnum truncate">
                           {c.present + c.late}/{c.total} · {c.absent + c.leave} away
                         </span>
