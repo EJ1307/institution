@@ -109,7 +109,7 @@ export function feeAccount(s: Student): FeeAccount {
       status,
       paidOn,
       mode: paidOn ? ((demoPaid?.mode as PaymentMode) ?? pickMode(`${s.id}${ins.id}`)) : null,
-      receipt: paidOn ? (demoPaid?.receipt ?? `AIS/${ay.label.replace("–", "-")}/${String(idx + 1)}${s.id.replace(/\D/g, "").padStart(4, "0")}`) : null,
+      receipt: paidOn ? (demoPaid?.receipt ?? `AIS/${ay.label.replace("–", "-")}/${String(idx + 1)}${(s.id.replace(/\D/g, "") || s.admissionNo.slice(-4)).padStart(4, "0")}`) : null,
     };
   });
 
