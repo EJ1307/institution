@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+/* ——— Design tokens ————————————————————————————————————————————————
+   Brand colours are CSS variables so a school can be re-branded live
+   (Settings → Branding). Everything else is a fixed, quiet neutral system. */
+
+:root {
+  --brand: #1f6b50;
+  --brand-deep: #123d2f;
+  --brand-soft: #e6f0ea;
+  --accent: #e3a82b;
+
+  --paper: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #fafaf7;
+  --line: #e7e5de;
+  --line-strong: #d6d3ca;
+  --ink: #17191c;
+  --ink-2: #464a50;
+  --muted: #777b81;
+  --faint: #a3a6aa;
+
+  --good: #17804f;
+  --good-soft: #e5f3ec;
+  --warn: #a8670c;
+  --warn-soft: #fbf0dc;
+  --bad: #b8402b;
+  --bad-soft: #fbe9e5;
+  --info: #2f5f9e;
+  --info-soft: #e8eef8;
+
+  /* validated categorical series (see README → Charts) */
+  --series-1: #1e8a5e;
+  --series-2: #d9961f;
+  --series-3: #3d6db5;
+  --series-4: #c45a3c;
+  --series-muted: #d9d6cd;
+  --grid: #eceae4;
+  --axis: #cfccc3;
+}
+
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--accent);
+
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+
+  --color-s1: var(--series-1);
+  --color-s2: var(--series-2);
+  --color-s3: var(--series-3);
+  --color-s4: var(--series-4);
+
+  --font-sans: "Instrument Sans Variable", "Tiro Devanagari Hindi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4 Variable", "Tiro Devanagari Hindi", ui-serif, Georgia, serif;
+
+  --radius-card: 12px;
+  --shadow-card: 0 1px 0 rgb(23 25 28 / 0.03), 0 1px 2px rgb(23 25 28 / 0.04);
+  --shadow-pop: 0 12px 32px -8px rgb(23 25 28 / 0.18), 0 2px 6px rgb(23 25 28 / 0.06);
+}
+
+/* Instrument Sans kerns its middle dot tight against the surrounding spaces;
+   borrow the separator glyph from the system sans so "A · B" breathes. */
+@font-face {
+  font-family: "Instrument Sans Variable";
+  font-style: normal;
+  font-weight: 400 700;
+  src: local("Helvetica Neue"), local("Helvetica"), local("Arial"), local("Segoe UI"), local("Roboto"), local("Liberation Sans"), local("DejaVu Sans");
+  unicode-range: U+00B7;
+}
+
+/* ——— Base ——————————————————————————————————————————————————————— */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  font-feature-settings: "ss01" 0;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--brand) 22%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Page titles use the serif — a quiet nod to the printed school register. */
+.title-serif {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  letter-spacing: -0.012em;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Thin, unobtrusive scrollbars inside panels */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+/* Chart tooltip */
+.viz-tip {
+  pointer-events: none;
+  position: absolute;
+  z-index: 30;
+  min-width: 140px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.35;
+  box-shadow: var(--shadow-pop);
+  transform: translate(-50%, calc(-100% - 10px));
+  white-space: nowrap;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes sheet-in {
+  from { transform: translateX(-100%); }
+  to { transform: none; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--good) 45%, transparent); }
+  50% { box-shadow: 0 0 0 6px transparent; }
+}
+
+.animate-fade-in { animation: fade-in 0.28s ease-out both; }
+.animate-pop-in { animation: pop-in 0.18s ease-out both; }
+.animate-sheet-in { animation: sheet-in 0.22s ease-out both; }
+.animate-pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+}
