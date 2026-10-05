@@ -345,9 +345,11 @@ function BoardCard({ a, onOpen, onMove }: { a: Application; onOpen: () => void; 
                   <ChevronLeft className="size-3.5" />
                 </button>
               )}
-              <button type="button" disabled={!next} onClick={() => next && onMove(next)} className="grid size-6 place-items-center rounded-md text-muted hover:bg-ink/5 hover:text-ink disabled:opacity-30" aria-label={next ? `Move ${a.child} to ${next}` : "Already enrolled"} title={next ? `Move to ${next}` : undefined}>
-                <ChevronRight className="size-3.5" />
-              </button>
+              {next && (
+                <button type="button" onClick={() => onMove(next)} className="grid size-6 place-items-center rounded-md text-muted hover:bg-ink/5 hover:text-ink" aria-label={`Move ${a.child} to ${next}`} title={`Move to ${next}`}>
+                  <ChevronRight className="size-3.5" />
+                </button>
+              )}
             </>
           )}
           <StageMenu a={a} onMove={onMove} />

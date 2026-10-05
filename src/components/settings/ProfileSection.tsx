@@ -64,7 +64,7 @@ export function ProfileSection() {
 
   const field = (k: string, label: string, opts: { hint?: string; placeholder?: string; className?: string; inputMode?: "numeric" | "email" | "tel" } = {}) => (
     <Field label={label} htmlFor={`${id}-${k}`} hint={opts.hint} error={errors[k]} className={opts.className}>
-      <Input id={`${id}-${k}`} value={f[k] ?? ""} onChange={(e) => set(k, e.target.value)} placeholder={opts.placeholder} inputMode={opts.inputMode} aria-invalid={!!errors[k]} />
+      <Input className="aria-invalid:border-bad" id={`${id}-${k}`} value={f[k] ?? ""} onChange={(e) => set(k, e.target.value)} placeholder={opts.placeholder} inputMode={opts.inputMode} aria-invalid={!!errors[k]} />
     </Field>
   );
 

@@ -124,10 +124,10 @@ export function AddStudentDialog({ open, onClose }: { open: boolean; onClose: ()
         <fieldset className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <legend className="mb-3 text-[11px] font-semibold tracking-[0.08em] text-muted uppercase">Student</legend>
           <Field label="First name *" htmlFor={`${id}-first`} error={errors.first}>
-            <Input id={`${id}-first`} value={f.first} onChange={(e) => set("first", e.target.value)} autoComplete="off" aria-invalid={!!errors.first} />
+            <Input className="aria-invalid:border-bad" id={`${id}-first`} value={f.first} onChange={(e) => set("first", e.target.value)} autoComplete="off" aria-invalid={!!errors.first} />
           </Field>
           <Field label="Surname *" htmlFor={`${id}-last`} error={errors.last}>
-            <Input id={`${id}-last`} value={f.last} onChange={(e) => set("last", e.target.value)} autoComplete="off" aria-invalid={!!errors.last} />
+            <Input className="aria-invalid:border-bad" id={`${id}-last`} value={f.last} onChange={(e) => set("last", e.target.value)} autoComplete="off" aria-invalid={!!errors.last} />
           </Field>
           <Field label="Gender *" error={errors.gender}>
             <Segmented
@@ -142,7 +142,7 @@ export function AddStudentDialog({ open, onClose }: { open: boolean; onClose: ()
             />
           </Field>
           <Field label="Date of birth *" htmlFor={`${id}-dob`} error={errors.dob} hint="As on the birth certificate">
-            <Input id={`${id}-dob`} type="date" value={f.dob} onChange={(e) => set("dob", e.target.value)} max={new Date().toISOString().slice(0, 10)} aria-invalid={!!errors.dob} />
+            <Input className="aria-invalid:border-bad" id={`${id}-dob`} type="date" value={f.dob} onChange={(e) => set("dob", e.target.value)} max={new Date().toISOString().slice(0, 10)} aria-invalid={!!errors.dob} />
           </Field>
           <Field label="Class & section *" htmlFor={`${id}-class`} error={errors.classKey}>
             <Select id={`${id}-class`} value={f.classKey} onChange={(e) => set("classKey", e.target.value)} aria-invalid={!!errors.classKey}>
@@ -163,7 +163,7 @@ export function AddStudentDialog({ open, onClose }: { open: boolean; onClose: ()
           <legend className="sr-only">Parent or guardian</legend>
           <div className="text-[11px] font-semibold tracking-[0.08em] text-muted uppercase sm:col-span-2">Parent / guardian</div>
           <Field label="Full name *" htmlFor={`${id}-guardian`} error={errors.guardian}>
-            <Input id={`${id}-guardian`} value={f.guardian} onChange={(e) => set("guardian", e.target.value)} aria-invalid={!!errors.guardian} />
+            <Input className="aria-invalid:border-bad" id={`${id}-guardian`} value={f.guardian} onChange={(e) => set("guardian", e.target.value)} aria-invalid={!!errors.guardian} />
           </Field>
           <Field label="Relation" htmlFor={`${id}-rel`}>
             <Select id={`${id}-rel`} value={f.relation} onChange={(e) => set("relation", e.target.value as Form["relation"])}>
@@ -187,7 +187,7 @@ export function AddStudentDialog({ open, onClose }: { open: boolean; onClose: ()
             </div>
           </Field>
           <Field label="Email" htmlFor={`${id}-email`} error={errors.email}>
-            <Input id={`${id}-email`} type="email" value={f.email} onChange={(e) => set("email", e.target.value)} placeholder="name@example.com" aria-invalid={!!errors.email} />
+            <Input className="aria-invalid:border-bad" id={`${id}-email`} type="email" value={f.email} onChange={(e) => set("email", e.target.value)} placeholder="name@example.com" aria-invalid={!!errors.email} />
           </Field>
           <Field label="Locality *" htmlFor={`${id}-loc`} error={errors.locality}>
             <Select id={`${id}-loc`} value={f.locality} onChange={(e) => set("locality", e.target.value)} aria-invalid={!!errors.locality}>

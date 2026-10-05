@@ -77,7 +77,7 @@ export function IdCardDialog({ student: s, open, onClose, medical }: { student: 
           #id-card-print { position: fixed; left: 0; top: 0; }
         }
       `}</style>
-      <div id="id-card-print" className="flex flex-col items-center justify-center gap-6 rounded-xl bg-paper px-4 py-6 sm:flex-row sm:items-start">
+      <div id="id-card-print" className="flex flex-col items-center justify-center gap-6 rounded-xl bg-paper px-4 py-6 sm:flex-row sm:items-start print:bg-white">
         {/* Front */}
         <figure className="flex flex-col items-center gap-2">
           <div className="relative flex h-[400px] w-[252px] flex-col overflow-hidden rounded-[14px] border border-line bg-white shadow-[0_8px_24px_-10px_rgb(23_25_28/0.28),0_1px_2px_rgb(23_25_28/0.08)]">

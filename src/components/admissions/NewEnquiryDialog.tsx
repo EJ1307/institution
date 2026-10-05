@@ -103,7 +103,7 @@ export function NewEnquiryDialog({ open, onClose, onCreate, filled }: { open: bo
     >
       <form id={formId} onSubmit={submit} noValidate className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Child's full name *" htmlFor={`${id}-child`} error={errors.child} className="sm:col-span-2">
-          <Input id={`${id}-child`} value={f.child} onChange={(e) => set("child", e.target.value)} placeholder="e.g. Myra Khanna" autoComplete="off" aria-invalid={!!errors.child} />
+          <Input className="aria-invalid:border-bad" id={`${id}-child`} value={f.child} onChange={(e) => set("child", e.target.value)} placeholder="e.g. Myra Khanna" autoComplete="off" aria-invalid={!!errors.child} />
         </Field>
         <Field label="Gender *" error={errors.gender}>
           <Segmented
@@ -144,7 +144,7 @@ export function NewEnquiryDialog({ open, onClose, onCreate, filled }: { open: bo
             )
           }
         >
-          <Input id={`${id}-dob`} type="date" value={f.dob} onChange={(e) => set("dob", e.target.value)} max={new Date().toISOString().slice(0, 10)} aria-invalid={!!errors.dob} />
+          <Input className="aria-invalid:border-bad" id={`${id}-dob`} type="date" value={f.dob} onChange={(e) => set("dob", e.target.value)} max={new Date().toISOString().slice(0, 10)} aria-invalid={!!errors.dob} />
         </Field>
         <Field label="How did they hear about us?" htmlFor={`${id}-src`}>
           <Select id={`${id}-src`} value={f.source} onChange={(e) => set("source", e.target.value)}>
@@ -156,16 +156,16 @@ export function NewEnquiryDialog({ open, onClose, onCreate, filled }: { open: bo
 
         <div className="border-t border-line pt-4 text-[11px] font-semibold tracking-[0.08em] text-muted uppercase sm:col-span-2">Parent</div>
         <Field label="Parent's name *" htmlFor={`${id}-parent`} error={errors.parent}>
-          <Input id={`${id}-parent`} value={f.parent} onChange={(e) => set("parent", e.target.value)} aria-invalid={!!errors.parent} />
+          <Input className="aria-invalid:border-bad" id={`${id}-parent`} value={f.parent} onChange={(e) => set("parent", e.target.value)} aria-invalid={!!errors.parent} />
         </Field>
         <Field label="Mobile *" htmlFor={`${id}-phone`} error={errors.phone}>
           <div className="flex">
             <span className="inline-flex h-9 items-center rounded-l-lg border border-r-0 border-line-strong/90 bg-surface-2 px-2.5 text-[13px] text-muted">+91</span>
-            <Input id={`${id}-phone`} inputMode="numeric" value={f.phone} onChange={(e) => set("phone", e.target.value)} placeholder="98100 00000" className="rounded-l-none" aria-invalid={!!errors.phone} />
+            <Input id={`${id}-phone`} inputMode="numeric" value={f.phone} onChange={(e) => set("phone", e.target.value)} placeholder="98100 00000" className="aria-invalid:border-bad rounded-l-none" aria-invalid={!!errors.phone} />
           </div>
         </Field>
         <Field label="Email" htmlFor={`${id}-email`} error={errors.email}>
-          <Input id={`${id}-email`} type="email" value={f.email} onChange={(e) => set("email", e.target.value)} aria-invalid={!!errors.email} />
+          <Input className="aria-invalid:border-bad" id={`${id}-email`} type="email" value={f.email} onChange={(e) => set("email", e.target.value)} aria-invalid={!!errors.email} />
         </Field>
         <Field label="Locality *" htmlFor={`${id}-loc`} error={errors.locality}>
           <Select id={`${id}-loc`} value={f.locality} onChange={(e) => set("locality", e.target.value)} aria-invalid={!!errors.locality}>
