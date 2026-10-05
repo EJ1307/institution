@@ -140,6 +140,7 @@ export function TeacherHomework() {
             value={when}
             onChange={setWhen}
             label="Due"
+            className="self-start md:self-auto"
             options={[
               { value: "current", label: "Open" },
               { value: "past", label: "Closed" },
