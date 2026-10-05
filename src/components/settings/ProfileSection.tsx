@@ -14,9 +14,9 @@ export const PROFILE_DEFAULTS: Record<string, string> = {
   state: "Haryana",
   pin: "122011",
   board: "CBSE",
-  affiliation: "530412",
-  schoolCode: "40512",
-  udise: "06180412307",
+  affiliation: "",
+  schoolCode: "",
+  udise: "",
   phone: "+91 124 4938 200",
   email: "office@amaltas.edu.in",
   website: "amaltas.edu.in",
@@ -50,8 +50,8 @@ export function ProfileSection() {
     if (!/^[A-Za-z]{2,6}$/.test(f.short.trim())) e.short = "2–6 letters, e.g. AIS.";
     if (!f.location.trim()) e.location = "Shown under the school name — e.g. Sector 57, Gurugram.";
     if (!/^\d{6}$/.test(f.pin)) e.pin = "PIN codes have 6 digits.";
-    if (!/^\d{5,7}$/.test(f.affiliation)) e.affiliation = "Check the affiliation number on your CBSE letter.";
-    if (!/^\d{11}$/.test(f.udise)) e.udise = "UDISE+ codes have 11 digits.";
+    if (f.affiliation && !/^\d{5,7}$/.test(f.affiliation)) e.affiliation = "Check the affiliation number on your CBSE letter.";
+    if (f.udise && !/^\d{11}$/.test(f.udise)) e.udise = "UDISE+ codes have 11 digits.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email)) e.email = "Enter a valid email address.";
     if (f.phone.replace(/\D/g, "").length < 10) e.phone = "Enter a landline with STD code or a mobile number.";
     setErrors(e);

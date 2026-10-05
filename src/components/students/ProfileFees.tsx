@@ -206,7 +206,7 @@ function ReceiptDialog({ student: s, ins, onClose }: { student: Student; ins: In
               <Crest size={36} />
               <div>
                 <div className="title-serif text-[14px] font-semibold">{brand.school}</div>
-                <div className="text-[11px] text-[#777B81]">{brand.city} · CBSE Aff. No. 530412</div>
+                <div className="text-[11px] text-[#777B81]">{brand.city} · Affiliated to CBSE</div>
               </div>
             </div>
             <div className="text-right">

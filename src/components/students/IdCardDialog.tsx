@@ -87,7 +87,7 @@ export function IdCardDialog({ student: s, open, onClose, medical }: { student: 
                 <div className="min-w-0">
                   <div className="title-serif truncate text-[13px] leading-tight font-semibold">{brand.school}</div>
                   <div className="truncate text-[9px] tracking-[0.02em] text-white/60">{brand.city}</div>
-                  <div className="truncate text-[9px] tracking-[0.02em] text-white/60">CBSE Affiliation No. 530412</div>
+                  <div className="truncate text-[9px] tracking-[0.02em] text-white/60">Affiliated to CBSE, New Delhi</div>
                 </div>
               </div>
               <div className="absolute inset-x-0 bottom-0 h-[3px] bg-accent" />
