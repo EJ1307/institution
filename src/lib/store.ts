@@ -24,8 +24,8 @@ export type AppState = {
   childId: string;
   /** classKey|isoDate → studentId → mark */
   attendance: Record<string, Record<string, AttendanceMark>>;
-  /** studentId|instalmentId → payment */
-  payments: Record<string, { paidOn: string; mode: string; receipt: string }>;
+  /** studentId|instalmentId → payment (reference/at/source only on payments made in the demo) */
+  payments: Record<string, { paidOn: string; mode: string; receipt: string; reference?: string; at?: string; source?: "parent" | "office" }>;
   notices: PostedNotice[];
   /** noticeId → acknowledged (parent) */
   acks: Record<string, string>;
@@ -39,6 +39,8 @@ export type AppState = {
   reminders: Record<string, string>;
   /** read notification ids */
   readNotifications: Record<string, true>;
+  /** studentId|isoDate → reported at: parent says the child won't take the bus that day */
+  busAbsence: Record<string, string>;
 };
 
 const KEY = "kaksha.demo.v1";
@@ -55,6 +57,7 @@ const initial: AppState = {
   homeworkDone: {},
   reminders: {},
   readNotifications: {},
+  busAbsence: {},
 };
 
 let state: AppState = initial;

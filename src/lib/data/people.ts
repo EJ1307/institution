@@ -1,11 +1,11 @@
 // Students and staff, generated deterministically.
 
-import { Rng, clamp } from "@/lib/rng";
+import { Rng, clamp, hash01 } from "@/lib/rng";
 import {
   BOY_NAMES, FATHER_NAMES, GIRL_NAMES, LOCALITIES, MOTHER_NAMES, OCCUPATIONS, SURNAMES,
 } from "./names";
 import { CLASSES, GRADE_BY_ID, HOUSES, type GradeId, type House } from "./school";
-import { routeForLocality } from "./transport";
+import { ROUTES, routeForLocality } from "./transport";
 
 export type Guardian = {
   name: string;
@@ -187,6 +187,19 @@ function buildStudents(): Student[] {
       serial++;
     });
     out.push(...kids);
+  }
+
+  // One bus per route (40 or 52 seats): seats fill to roughly 84–96% and every
+  // other family makes its own way, so no route is ever over capacity.
+  for (const route of ROUTES) {
+    const onRoute = out.filter((s) => s.routeId === route.id);
+    const reserved = onRoute.filter((s) => s.parentId === PERSONA_PARENT.id).length;
+    const seats = Math.round(route.capacity * (0.84 + hash01("fill", route.id) * 0.12)) - reserved;
+    onRoute
+      .filter((s) => s.parentId !== PERSONA_PARENT.id)
+      .sort((a, b) => hash01("seat", a.id) - hash01("seat", b.id))
+      .slice(Math.max(0, seats))
+      .forEach((s) => (s.routeId = null));
   }
 
   // A few student leaders in the senior school
