@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ChevronRight, IdCard, Lock, MessageSquareText, UserX } from "lucide-react";
 import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Tabs } from "@/components/ui/forms";
 import { EmptyState, PageHeader } from "@/components/ui/layout";
@@ -27,7 +27,6 @@ export type ProfileTab = "overview" | "attendance" | "academics" | "fees" | "doc
 export function StudentProfile() {
   const { id } = useParams<{ id: string }>();
   const params = useSearchParams();
-  const router = useRouter();
   const role = useRole();
   const teacher = useTeacher();
   const [dialog, setDialog] = useState<"id" | "message" | null>(null);
@@ -89,7 +88,7 @@ export function StudentProfile() {
   ];
   const requested = params.get("tab") as ProfileTab | null;
   const tab: ProfileTab = requested && tabs.some((t) => t.value === requested) ? requested : "overview";
-  const setTab = (t: ProfileTab) => router.replace(t === "overview" ? `/students/${s.id}` : `/students/${s.id}?tab=${t}`, { scroll: false });
+  const setTab = (t: ProfileTab) => window.history.replaceState(null, "", t === "overview" ? `/students/${s.id}` : `/students/${s.id}?tab=${t}`);
 
   const g = GRADE_BY_ID[s.grade];
   const ay = academicYear();

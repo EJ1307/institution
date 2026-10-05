@@ -3,11 +3,11 @@
 import { Lock } from "lucide-react";
 import { useId } from "react";
 import { Select, Switch } from "@/components/ui/forms";
-import { KeyValue } from "@/components/ui/layout";
 import { useToast } from "@/components/ui/overlay";
 import { Card, CardHeader, cn } from "@/components/ui/primitives";
 import { number, rupees } from "@/lib/format";
 import { setState, useAppState } from "@/lib/store";
+import { InfoRow, SettingRow } from "./rows";
 
 const CHANNELS = [
   { id: "sms", label: "SMS", cost: 0.2 },
@@ -100,7 +100,8 @@ export function NotificationsSection() {
           title="What families and staff hear about"
           description={`Turn channels on or off per event. Estimated messaging cost at these settings: ${rupees(cost)} a month.`}
         />
-        <div className="scroll-thin overflow-x-auto">
+        <MobileList isOn={isOn} toggle={toggle} />
+        <div className="scroll-thin hidden overflow-x-auto sm:block">
           <table className="w-full min-w-[640px] border-collapse text-[13px]">
             <thead className="bg-surface-2 text-[11.5px] font-semibold text-muted">
               <tr>
@@ -125,15 +126,11 @@ export function NotificationsSection() {
 
       <Card>
         <CardHeader title="Delivery" description="Rules that apply to every message" />
-        <dl className="mx-5 mb-4 divide-y divide-line border-t border-line">
-          <KeyValue
-            k={
-              <span>
-                Quiet hours
-                <span className="block text-[12px] text-faint">Hold non-urgent messages from 9 pm to 7 am</span>
-              </span>
-            }
-            v={
+        <div className="mx-5 mb-2 divide-y divide-line border-t border-line">
+          <SettingRow
+            label="Quiet hours"
+            hint="Hold non-urgent messages from 9 pm to 7 am"
+            control={
               <Switch
                 checked={quiet}
                 label="Quiet hours"
@@ -143,23 +140,25 @@ export function NotificationsSection() {
                 }}
               />
             }
-            className="items-center"
           />
-          <KeyValue
-            k={<label htmlFor={`${id}-lang`}>Message language</label>}
-            v={
+          <SettingRow
+            htmlFor={`${id}-lang`}
+            label="Message language"
+            hint="Parents choose their language in the app"
+            control={
               <Select id={`${id}-lang`} defaultValue="en-hi" onChange={() => toast({ title: "Message language updated", body: "Templates switch at the next send." })}>
-                <option value="en">English</option>
-                <option value="en-hi">English, with Hindi for parents who chose it</option>
-                <option value="hi">Hindi</option>
+                <option value="en">English only</option>
+                <option value="en-hi">English + Hindi</option>
+                <option value="hi">Hindi only</option>
               </Select>
             }
-            className="items-center"
           />
-          <KeyValue k="SMS sender ID" v={<span className="tnum">AMLTAS · DLT-registered templates</span>} />
-          <KeyValue k="WhatsApp" v="Verified school business number · 24 approved templates" />
-          <KeyValue k="Fallback" v="If an app push isn't opened in 15 minutes, urgent messages go by SMS" />
-        </dl>
+          <dl className="divide-y divide-line">
+            <InfoRow k="SMS sender ID" v={<span className="tnum">AMLTAS · DLT-registered templates</span>} />
+            <InfoRow k="WhatsApp" v="Verified school business number · 24 approved templates" />
+            <InfoRow k="Fallback" v="If an app push isn't opened in 15 minutes, urgent messages go by SMS" />
+          </dl>
+        </div>
       </Card>
     </div>
   );
@@ -198,5 +197,48 @@ function GroupRows({ group, events, isOn, toggle }: { group: string; events: Eve
         </tr>
       ))}
     </>
+  );
+}
+
+function MobileList({ isOn, toggle }: { isOn: (e: Event, c: Channel) => boolean; toggle: (e: Event, c: Channel, v: boolean) => void }) {
+  return (
+    <div className="border-t border-line sm:hidden">
+      {GROUPS.map((g) => (
+        <section key={g.group}>
+          <h3 className="border-b border-line bg-surface-2 px-4 py-1.5 text-[11px] font-semibold tracking-[0.06em] text-muted uppercase">{g.group}</h3>
+          <ul>
+            {g.events.map((e) => (
+              <li key={e.id} className="border-b border-line px-4 py-3 last:border-b-0">
+                <p className="text-[13px] text-ink">{e.label}</p>
+                <p className="text-[12px] text-muted">{e.who}</p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {CHANNELS.map((c) => {
+                    const locked = e.locked?.includes(c.id);
+                    const on = isOn(e, c.id);
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        aria-pressed={on}
+                        disabled={locked}
+                        onClick={() => toggle(e, c.id, !on)}
+                        className={cn(
+                          "inline-flex h-7 items-center gap-1 rounded-full border px-2.5 text-[12px] font-medium transition-colors",
+                          on ? "border-brand bg-brand-soft text-brand" : "border-line-strong text-muted",
+                          locked && "opacity-70",
+                        )}
+                      >
+                        {locked && <Lock className="size-3" />}
+                        {c.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
   );
 }

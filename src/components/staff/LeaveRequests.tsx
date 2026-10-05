@@ -73,19 +73,20 @@ export function LeaveRequests({ onOpen }: { onOpen: (staffId: string) => void })
         title="Leave requests"
         description={`${plural(counts.pending, "request")} waiting for you · decisions reach the staff app instantly`}
         action={
-          <Segmented
-            size="sm"
-            label="Show"
-            value={filter}
-            onChange={setFilter}
-            options={[
-              { value: "pending", label: "Pending", count: counts.pending },
-              { value: "approved", label: "Approved", count: counts.approved },
-              { value: "declined", label: "Declined", count: counts.declined },
-              { value: "all", label: "All", count: list.length },
-            ]}
-            className="hidden md:inline-flex"
-          />
+          <div className="hidden md:block">
+            <Segmented
+              size="sm"
+              label="Show"
+              value={filter}
+              onChange={setFilter}
+              options={[
+                { value: "pending", label: "Pending", count: counts.pending },
+                { value: "approved", label: "Approved", count: counts.approved },
+                { value: "declined", label: "Declined", count: counts.declined },
+                { value: "all", label: "All", count: list.length },
+              ]}
+            />
+          </div>
         }
       />
       <div className="px-4 pb-3 md:hidden">
@@ -275,12 +276,12 @@ function CoverMenu({
           type="button"
           onClick={toggle}
           aria-expanded={open}
-          className="inline-flex items-center gap-1.5 rounded-md px-1.5 py-0.5 font-medium text-ink hover:bg-ink/5"
+          className="-mx-1.5 inline-flex flex-wrap items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-left font-medium text-ink hover:bg-ink/5"
         >
-          {current ? `${current.staff.title} ${current.staff.name}` : currentLabel}
+          <span className="whitespace-nowrap">{current ? `${current.staff.title} ${current.staff.name}` : currentLabel}</span>
           {current && (
-            <span className={cn("tnum font-normal", current.free === total ? "text-good" : "text-warn")}>
-              · free for {current.free === total ? "all" : `${current.free} of`} {plural(total, "period")}
+            <span className={cn("tnum font-normal whitespace-nowrap", current.free === total ? "text-good" : "text-warn")}>
+              free for {current.free === total ? "all" : `${current.free} of`} {plural(total, "period")}
             </span>
           )}
           <ChevronDown className="size-3.5 text-muted" />

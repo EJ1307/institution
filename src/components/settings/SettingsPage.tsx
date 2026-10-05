@@ -1,7 +1,7 @@
 "use client";
 
 import { Bell, Building2, Database, Lock, Palette, PlugZap, ShieldCheck, UsersRound, type LucideIcon } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Tabs } from "@/components/ui/forms";
 import { EmptyState, PageHeader } from "@/components/ui/layout";
 import { Badge, ButtonLink, Card, cn } from "@/components/ui/primitives";
@@ -31,11 +31,10 @@ export function SettingsPage() {
   const role = useRole();
   const brand = useBrand();
   const params = useSearchParams();
-  const router = useRouter();
   const ay = academicYear();
   const requested = params.get("tab") as Section | null;
   const section: Section = requested && SECTIONS.some((s) => s.id === requested) ? requested : "profile";
-  const go = (s: Section) => router.replace(s === "profile" ? "/settings" : `/settings?tab=${s}`, { scroll: false });
+  const go = (s: Section) => window.history.replaceState(null, "", s === "profile" ? "/settings" : `/settings?tab=${s}`);
 
   if (role !== "admin") {
     return (

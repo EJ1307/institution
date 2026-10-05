@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight, Download, SearchX } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Fragment, useMemo, useState } from "react";
 import { SearchInput, Segmented, Select, Tabs } from "@/components/ui/forms";
 import { EmptyState, PageHeader } from "@/components/ui/layout";
@@ -38,7 +38,6 @@ type Tab = "directory" | "leave";
 
 export function StaffPage() {
   const params = useSearchParams();
-  const router = useRouter();
   const toast = useToast();
   const brand = useBrand();
   const decisions = useAppState((s) => s.leaveDecisions);
@@ -59,7 +58,7 @@ export function StaffPage() {
       else q.delete("id");
     }
     const s = q.toString();
-    router.replace(s ? `/staff?${s}` : "/staff", { scroll: false });
+    window.history.replaceState(null, "", s ? `/staff?${s}` : "/staff");
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,8 +177,28 @@ export function StaffPage() {
           </SummaryStrip>
 
           <Card>
-            <div className="flex flex-col gap-2.5 px-4 py-3.5 sm:px-5 xl:flex-row xl:items-center">
-              <SearchInput value={q} onChange={setQ} placeholder="Search name or subject" className="w-full xl:min-w-[180px] xl:flex-1" />
+            <div className="flex flex-col gap-2.5 px-4 pt-3.5 pb-3 sm:px-5">
+              <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center">
+                <SearchInput value={q} onChange={setQ} placeholder="Search name, subject or designation" className="w-full lg:max-w-[360px] lg:flex-1" />
+                <div className="grid grid-cols-2 gap-2 sm:flex lg:ml-auto">
+                  <Select aria-label="Department" value={dept} onChange={(e) => setDept(e.target.value)}>
+                    <option value="all">All departments</option>
+                    {departments
+                      .filter((d) => cat === "all" || all.some((s) => s.department === d && s.category === cat))
+                      .map((d) => (
+                        <option key={d} value={d}>
+                          {d}
+                        </option>
+                      ))}
+                  </Select>
+                  <Select aria-label="Today" value={today} onChange={(e) => setToday(e.target.value as typeof today)}>
+                    <option value="all">Anyone today</option>
+                    <option value="in">In school</option>
+                    <option value="late">Arrived late</option>
+                    <option value="leave">On leave</option>
+                  </Select>
+                </div>
+              </div>
               <div className="scroll-thin -mx-1 overflow-x-auto px-1">
                 <Segmented
                   label="Category"
@@ -190,24 +209,6 @@ export function StaffPage() {
                   }}
                   options={CATS.map((c) => ({ ...c, count: c.value === "all" ? all.length : all.filter((s) => s.category === c.value).length }))}
                 />
-              </div>
-              <div className="grid grid-cols-2 gap-2 sm:flex">
-                <Select aria-label="Department" value={dept} onChange={(e) => setDept(e.target.value)}>
-                  <option value="all">All departments</option>
-                  {departments
-                    .filter((d) => cat === "all" || all.some((s) => s.department === d && s.category === cat))
-                    .map((d) => (
-                      <option key={d} value={d}>
-                        {d}
-                      </option>
-                    ))}
-                </Select>
-                <Select aria-label="Today" value={today} onChange={(e) => setToday(e.target.value as typeof today)}>
-                  <option value="all">Anyone today</option>
-                  <option value="in">In school</option>
-                  <option value="late">Arrived late</option>
-                  <option value="leave">On leave</option>
-                </Select>
               </div>
             </div>
 

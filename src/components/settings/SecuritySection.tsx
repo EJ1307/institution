@@ -3,11 +3,11 @@
 import { Archive, Download, Globe2, KeyRound, LockKeyhole, ShieldCheck } from "lucide-react";
 import { useId, useMemo } from "react";
 import { Select, Switch } from "@/components/ui/forms";
-import { KeyValue } from "@/components/ui/layout";
 import { useToast } from "@/components/ui/overlay";
 import { Avatar, Badge, Button, Card, CardHeader } from "@/components/ui/primitives";
 import { Table, Td, Th, THead, Tr } from "@/components/ui/table";
 import { downloadCsv } from "@/components/students/shared";
+import { InfoRow, SettingRow } from "./rows";
 import { leaveRequests } from "@/lib/data/attendance";
 import { applications } from "@/lib/data/admissions";
 import { addDays, isoDate, today } from "@/lib/data/calendar";
@@ -105,16 +105,11 @@ export function SecuritySection() {
 
       <Card>
         <CardHeader title="Sign-in & sessions" icon={<KeyRound />} />
-        <dl className="mx-5 mb-4 divide-y divide-line border-t border-line">
-          <KeyValue
-            className="items-center"
-            k={
-              <span>
-                Two-step verification for staff
-                <span className="block text-[12px] text-faint">A code from an authenticator app or SMS on every new device</span>
-              </span>
-            }
-            v={
+        <div className="mx-5 mb-2 divide-y divide-line border-t border-line">
+          <SettingRow
+            label="Two-step verification for staff"
+            hint="A code from an authenticator app or SMS on every new device"
+            control={
               <Switch
                 checked={twoFactor}
                 label="Two-step verification for staff"
@@ -128,15 +123,11 @@ export function SecuritySection() {
               />
             }
           />
-          <KeyValue
-            className="items-center"
-            k={
-              <label htmlFor={`${id}-timeout`}>
-                Sign staff out after inactivity
-                <span className="block text-[12px] text-faint">Shared computers in the staff room and office</span>
-              </label>
-            }
-            v={
+          <SettingRow
+            htmlFor={`${id}-timeout`}
+            label="Sign staff out after inactivity"
+            hint="Shared computers in the staff room and office"
+            control={
               <Select id={`${id}-timeout`} value={timeout} onChange={(e) => set({ sessionTimeout: e.target.value }, "Session timeout updated", `Staff are signed out after ${e.target.value === "480" ? "8 hours" : `${e.target.value} minutes`} without activity.`)}>
                 <option value="15">15 minutes</option>
                 <option value="30">30 minutes</option>
@@ -145,9 +136,11 @@ export function SecuritySection() {
               </Select>
             }
           />
-          <KeyValue k="Parents" v="Mobile number + one-time code · no passwords to forget" />
-          <KeyValue k="Last security review" v={`${fmtDay(new Date(t.getFullYear(), 6, 18))} · independent penetration test, no critical findings`} />
-        </dl>
+          <dl className="divide-y divide-line">
+            <InfoRow k="Parents" v="Mobile number + one-time code · no passwords to forget" />
+            <InfoRow k="Last security review" v={`${fmtDay(new Date(t.getFullYear(), 6, 18))} · independent penetration test, no critical findings`} />
+          </dl>
+        </div>
       </Card>
 
       <Card>

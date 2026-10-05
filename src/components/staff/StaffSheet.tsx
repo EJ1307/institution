@@ -134,7 +134,7 @@ export function StaffSheet({ person, presence, onClose }: { person: Staff | null
                 ))}
               </div>
               <p className="mt-2 text-[12px] text-muted">
-                Busiest on {WEEKDAYS[data.busiest]} with {data.perDay[data.busiest]} periods. Hover a period for the subject and room.
+                Busiest on {WEEKDAYS[data.busiest]} with {data.perDay[data.busiest]} periods{data.perDay[todayIdx] !== undefined ? ` · ${data.perDay[todayIdx]} today` : ""}.
               </p>
             </section>
           )}

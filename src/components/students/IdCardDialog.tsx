@@ -86,12 +86,13 @@ export function IdCardDialog({ student: s, open, onClose, medical }: { student: 
                 <Crest size={30} />
                 <div className="min-w-0">
                   <div className="title-serif truncate text-[13px] leading-tight font-semibold">{brand.school}</div>
-                  <div className="truncate text-[9px] tracking-[0.02em] text-white/60">{brand.city} · CBSE Aff. No. 530412</div>
+                  <div className="truncate text-[9px] tracking-[0.02em] text-white/60">{brand.city}</div>
+                  <div className="truncate text-[9px] tracking-[0.02em] text-white/60">CBSE Affiliation No. 530412</div>
                 </div>
               </div>
               <div className="absolute inset-x-0 bottom-0 h-[3px] bg-accent" />
             </div>
-            <div className="-mt-8 flex justify-center">
+            <div className="relative z-10 -mt-8 flex justify-center">
               <div className="rounded-[10px] bg-white p-[3px] shadow-[0_1px_3px_rgb(0_0_0/0.15)]">
                 <svg width={88} height={104} viewBox="0 0 88 104" className="block rounded-[8px]" role="img" aria-label={`Photograph of ${s.name}`}>
                   <rect width="88" height="104" fill="#E9ECE7" />
@@ -161,11 +162,12 @@ export function IdCardDialog({ student: s, open, onClose, medical }: { student: 
               <>
                 <div className="mt-3 text-[8.5px] font-semibold tracking-[0.12em] text-[#777B81] uppercase">School bus</div>
                 <p className="mt-1 text-[#17191C]">
-                  Route {route.id}, {route.name} · {route.bus}
+                  Route {route.id} · {route.name}
                 </p>
-                <p className="text-[#777B81]">
-                  Attendant {route.attendant} · Transport desk +91 124 4938 210
+                <p className="tnum text-[#777B81]">
+                  {route.bus} · attendant {route.attendant}
                 </p>
+                <p className="tnum text-[#777B81]">Transport desk +91 124 4938 210</p>
               </>
             )}
             <div className="mt-auto rounded-lg bg-[#F6F5F1] px-3 py-2.5">

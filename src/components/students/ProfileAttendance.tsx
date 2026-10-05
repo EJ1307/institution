@@ -142,21 +142,14 @@ export function ProfileAttendance({ student: s }: { student: Student }) {
           title="Absences, leave and late arrivals"
           description={`${data.log.length} entries this year`}
           action={
-            <Segmented
-              size="sm"
-              label="Show"
-              value={filter}
-              onChange={setFilter}
-              options={[
-                { value: "all", label: "All", count: data.log.length },
-                { value: "A", label: "Absent", count: data.sum.absent },
-                { value: "E", label: "Leave", count: data.sum.leave },
-                { value: "L", label: "Late", count: data.sum.late },
-              ]}
-              className="hidden sm:inline-flex"
-            />
+            <div className="hidden sm:block">
+              <LogFilter value={filter} onChange={setFilter} counts={{ all: data.log.length, A: data.sum.absent, E: data.sum.leave, L: data.sum.late }} />
+            </div>
           }
         />
+        <div className="px-5 pb-3 sm:hidden">
+          <LogFilter value={filter} onChange={setFilter} counts={{ all: data.log.length, A: data.sum.absent, E: data.sum.leave, L: data.sum.late }} />
+        </div>
         {rows.length === 0 ? (
           <EmptyState icon={<CalendarCheck2 />} title="Nothing to show" body={`${s.firstName} has a clean record for this filter.`} className="border-t border-line py-10" />
         ) : (
@@ -185,5 +178,22 @@ export function ProfileAttendance({ student: s }: { student: Student }) {
         )}
       </Card>
     </div>
+  );
+}
+
+function LogFilter({ value, onChange, counts }: { value: "all" | "A" | "E" | "L"; onChange: (v: "all" | "A" | "E" | "L") => void; counts: Record<"all" | "A" | "E" | "L", number> }) {
+  return (
+    <Segmented
+      size="sm"
+      label="Show"
+      value={value}
+      onChange={onChange}
+      options={[
+        { value: "all", label: "All", count: counts.all },
+        { value: "A", label: "Absent", count: counts.A },
+        { value: "E", label: "Leave", count: counts.E },
+        { value: "L", label: "Late", count: counts.L },
+      ]}
+    />
   );
 }

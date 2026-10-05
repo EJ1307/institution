@@ -12,7 +12,7 @@ import { feeAccount } from "@/lib/data/fees";
 import { classTeacher, type Student } from "@/lib/data/people";
 import { classLabel, hasMarks } from "@/lib/data/school";
 import { ROUTE_BY_ID } from "@/lib/data/transport";
-import { fmtDate, fmtDay, fmtMonthYear, number, percent, rupees } from "@/lib/format";
+import { fmtDate, fmtDay, number, percent, rupees } from "@/lib/format";
 import { useAppState } from "@/lib/store";
 import { CalendarLegend, MonthCalendar } from "./MonthCalendar";
 import { classRate, medicalFor } from "./profileData";
@@ -92,7 +92,6 @@ function AttendanceCard({ student: s, onTab }: { student: Student; onTab: (t: Pr
           </div>
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex items-center justify-end gap-1">
-              <span className="mr-auto text-[12px] text-muted lg:hidden">{fmtMonthYear(anchor)}</span>
               <Button size="icon-sm" variant="ghost" disabled={!canBack} onClick={() => setAnchor(prevMonth)} aria-label="Previous month">
                 <ChevronLeft />
               </Button>
@@ -242,8 +241,9 @@ function FeeCard({ student: s, onTab }: { student: Student; onTab?: (t: ProfileT
       <CardBody>
         <div className="flex items-end justify-between gap-3">
           <div>
-            <div className="text-[12px] text-muted">{acc.outstanding > 0 ? (acc.overdue > 0 ? "Overdue" : "Due now") : "Outstanding"}</div>
+            <div className="text-[12px] text-muted">{acc.outstanding > 0 && acc.overdue === 0 ? "Due now" : "Outstanding"}</div>
             <div className={cn("tnum text-[24px] leading-tight font-semibold", acc.overdue > 0 ? "text-bad" : "text-ink")}>{rupees(acc.outstanding)}</div>
+            {acc.overdue > 0 && <div className="tnum text-[12px] text-bad">{rupees(acc.overdue)} overdue</div>}
           </div>
           <div className="text-right text-[12px] text-muted">
             <div>Paid this year</div>
@@ -283,11 +283,9 @@ function ContactCard({ student: s }: { student: Student }) {
           <li key={g.name} className="flex items-center gap-3 border-t border-line py-3 first:border-t-0 first:pt-0">
             <Avatar name={g.name} size={34} />
             <div className="min-w-0 flex-1">
-              <p className="flex items-center gap-2 truncate text-[13px] font-medium text-ink">
-                {g.name}
-                {i === 0 && <span className="text-[11px] font-normal text-muted">Primary</span>}
-              </p>
+              <p className="truncate text-[13px] font-medium text-ink">{g.name}</p>
               <p className="truncate text-[12px] text-muted">
+                {i === 0 ? <span className="text-ink-2">Primary · </span> : null}
                 {g.relation} · {g.occupation}
               </p>
             </div>

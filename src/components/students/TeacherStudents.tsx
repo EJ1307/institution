@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import { SearchInput } from "@/components/ui/forms";
 import { EmptyState, PageHeader } from "@/components/ui/layout";
 import { useToast } from "@/components/ui/overlay";
-import { Avatar, Badge, Button, ButtonLink, Card, CardHeader, cn, Meter } from "@/components/ui/primitives";
+import { Avatar, ButtonLink, Button, Card, CardHeader, cn, Meter } from "@/components/ui/primitives";
 import { SortTh, Table, Td, Th, THead, Tr } from "@/components/ui/table";
 import { classDay, currentSchoolDay, isMarked, studentSummary } from "@/lib/data/attendance";
 import { academicYear, isoDate, schoolDaysBetween } from "@/lib/data/calendar";
@@ -178,23 +178,23 @@ export function TeacherStudents() {
               onClick={() => {
                 setActive(t.key);
                 setQ("");
-                router.replace(`/students?class=${t.key}`, { scroll: false });
+                window.history.replaceState(null, "", `/students?class=${t.key}`);
               }}
               className={cn(
                 "rounded-[var(--radius-card)] border bg-surface p-4 text-left shadow-[var(--shadow-card)] transition-[border-color,box-shadow]",
                 selected ? "border-brand shadow-[0_0_0_3px_color-mix(in_oklab,var(--brand)_13%,transparent)]" : "border-line hover:border-line-strong",
               )}
             >
-              <div className="flex items-start justify-between gap-2">
-                <span className="title-serif text-[22px] leading-none font-semibold text-ink">{classLabel(t.ref.grade, t.ref.section)}</span>
-                {isOwn ? <Badge tone="brand">Class teacher</Badge> : <span className="tnum pt-0.5 text-[11.5px] text-muted">{t.periods} periods/wk</span>}
+              <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
+                <span className="title-serif text-[22px] leading-none font-semibold whitespace-nowrap text-ink">{classLabel(t.ref.grade, t.ref.section)}</span>
+                {isOwn ? <span className="text-[11.5px] font-medium text-brand">Class teacher</span> : <span className="tnum text-[11.5px] text-muted">{t.periods} periods/wk</span>}
               </div>
-              <div className="mt-3 flex items-center justify-between gap-2 text-[12px] text-muted">
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5 text-[12px] text-muted">
                 <span className="tnum">{t.list.length} students</span>
                 {t.marked ? (
                   <span className="tnum">{percent(t.today.rate, 0)} present today</span>
                 ) : (
-                  <span className="font-medium text-warn">Register not marked</span>
+                  <span className="font-medium text-warn">Not marked yet</span>
                 )}
               </div>
             </button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Columns3, List, MoreHorizontal, Plus, RotateCcw, SearchX, XCircle } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, type DragEvent } from "react";
 import { Legend, SERIES } from "@/components/charts/misc";
 import { Checkbox, SearchInput, Segmented, Select } from "@/components/ui/forms";
@@ -38,7 +38,6 @@ function gradeShort(g: GradeId) {
 
 export function AdmissionsPage() {
   const toast = useToast();
-  const router = useRouter();
   const params = useSearchParams();
   const stages = useAppState((s) => s.admissionStages);
   const added = useAppState((s) => s.newEnquiries);
@@ -65,7 +64,7 @@ export function AdmissionsPage() {
     else sp.delete("app");
     sp.delete("new");
     const s = sp.toString();
-    router.replace(s ? `/admissions?${s}` : "/admissions", { scroll: false });
+    window.history.replaceState(null, "", s ? `/admissions?${s}` : "/admissions");
   };
 
   const counsellors = useMemo(() => [...new Set(apps.map((a) => a.counsellor))].sort(), [apps]);
@@ -160,7 +159,7 @@ export function AdmissionsPage() {
         }
       />
 
-      <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-4 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <Stat label="Active enquiries" value={number(kpi.active)} sub={`+${kpi.thisWeek} this week · ${kpi.withdrawn} withdrawn`} />
         <Stat label="Visited the campus" value={number(kpi.visits)} sub={`${percent(kpi.visits / (kpi.active || 1), 0)} of enquiries`} />
         <Stat label="Offers made" value={number(kpi.offersReached)} sub={`${kpi.offers} awaiting fee payment`} />

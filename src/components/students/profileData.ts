@@ -17,7 +17,9 @@ export function medicalFor(s: Student, ref: Date) {
   const age = ref.getFullYear() - Number(s.dob.slice(0, 4));
   const allergies = hash01("allergy", s.id) < 0.16 ? [ALLERGIES[Math.floor(hash01("allergy-k", s.id) * ALLERGIES.length)]] : [];
   const conditions = hash01("cond", s.id) < 0.1 ? [CONDITIONS[Math.floor(hash01("cond-k", s.id) * CONDITIONS.length)]] : [];
-  const height = Math.round(Math.min(178, 86 + 6.1 * age + (hash01("h", s.id) - 0.5) * 10 - (s.gender === "F" && age > 12 ? (age - 12) * 2 : 0)));
+  // rough growth curve: ~6 cm a year to 12, then boys keep growing to 17 and girls level off by 15
+  const teen = s.gender === "M" ? 4 * Math.max(0, Math.min(age, 17) - 12) : 2.4 * Math.max(0, Math.min(age, 15) - 12);
+  const height = Math.round(76 + 6.3 * Math.min(age, 12) + teen + (hash01("h", s.id) - 0.5) * 10);
   const bmi = 14.6 + Math.max(0, age - 4) * 0.42 + (hash01("w", s.id) - 0.5) * 3;
   const weight = Math.round(bmi * (height / 100) ** 2);
   const checkup = new Date(academicYear(ref).startYear, 6, 14 + Math.floor(hash01("chk", s.id) * 12));

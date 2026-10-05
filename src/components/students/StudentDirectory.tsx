@@ -193,7 +193,7 @@ export function StudentDirectory() {
 
       <Card>
         <div className="flex flex-col gap-2.5 px-4 py-3.5 sm:px-5 xl:flex-row xl:items-center">
-          <SearchInput value={q} onChange={setQ} placeholder="Search name, admission no., parent or phone" className="w-full xl:max-w-[340px] xl:flex-1" />
+          <SearchInput value={q} onChange={setQ} placeholder="Search student, parent or phone" className="w-full xl:max-w-[340px] xl:flex-1" />
           <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
             <Select
               aria-label="Class"
