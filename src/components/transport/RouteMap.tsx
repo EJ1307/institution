@@ -30,10 +30,13 @@ export function RouteMap({
   height = 176,
   ariaLabel,
   complete = false,
+  parkedAt = null,
 }: {
   route: Route;
   /** the run is over: draw the whole line as travelled, no bus */
   complete?: boolean;
+  /** show an idle bus at this stop (morning-order index) when it isn't running */
+  parkedAt?: number | null;
   /** morning-order position 0..n-1, or null when the bus isn't running */
   position: number | null;
   run: Run | null;
@@ -79,7 +82,8 @@ export function RouteMap({
   }, [geo, position, run, n, complete]);
 
   const fullPath = geo.segs.map((s, i) => (i === 0 ? "M" : "L") + s.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join("L")).join("");
-  const bus = position !== null ? pointAt(position) : null;
+  const bus = position !== null ? pointAt(position) : parkedAt !== null ? geo.pts[parkedAt] : null;
+  const idle = position === null;
   const passed = (i: number) => complete || (position !== null && run !== null && (run === "am" ? i <= position : i >= position));
   const narrow = width < 640;
 
@@ -141,7 +145,7 @@ export function RouteMap({
                   <animate attributeName="fill-opacity" values="0.28;0;0.28" dur="2.2s" repeatCount="indefinite" />
                 </circle>
               )}
-              <circle r={15} fill="var(--brand)" stroke="var(--surface)" strokeWidth={3} />
+              <circle r={15} fill={idle ? "var(--ink-2)" : "var(--brand)"} stroke="var(--surface)" strokeWidth={3} />
               <Bus x={-8} y={-8} width={16} height={16} color="#fff" strokeWidth={2.2} />
             </g>
           )}
@@ -204,9 +208,12 @@ export function RouteTrack({
   actual,
   rowHeight = 56,
   complete = false,
+  parkedAt = null,
 }: {
   /** the run is over: whole line travelled, no bus marker */
   complete?: boolean;
+  /** idle bus at this stop (morning-order index) */
+  parkedAt?: number | null;
   route: Route;
   /** order of travel to show */
   run: Run;
@@ -256,6 +263,11 @@ export function RouteTrack({
                   <p className={cn("truncate text-[13.5px] leading-5", hl ? "font-semibold text-ink" : done ? "text-muted" : "font-medium text-ink")}>
                     {isSchool ? "School" : primary}
                     {hl && <span className="ml-2 rounded-full bg-ink px-1.5 py-0.5 align-[1px] text-[10px] font-semibold text-white">Your stop</span>}
+                    {parkedAt === idx && p === null && !complete && (
+                      <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-ink/[0.07] px-1.5 py-0.5 align-[1px] text-[10px] font-semibold text-ink-2">
+                        <Bus className="size-2.5" /> {isSchool ? "Parked here" : "Starts here"}
+                      </span>
+                    )}
                   </p>
                   {secondary && <p className="truncate text-[12px] text-muted">{secondary}</p>}
                 </div>

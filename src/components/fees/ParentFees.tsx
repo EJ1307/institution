@@ -38,7 +38,7 @@ export function ParentFees() {
           {next ? (
             <NextPayment ins={next} childName={child.firstName} routeId={child.routeId} concessionLabel={child.concession ? `${child.concession.label} concession · ${child.concession.pct}%` : null} onPay={() => setPaying(next)} />
           ) : (
-            <AllClear upcoming={upcoming} childName={child.firstName} />
+            <AllClear upcoming={upcoming} childName={child.firstName} lastPaid={paidList[paidList.length - 1] ?? null} onReceipt={(i) => setReceipt(receiptFor(child, i.id))} />
           )}
 
           <Card>
@@ -221,7 +221,7 @@ function Line({ k, v, tone, muted }: { k: string; v: string; tone?: "good"; mute
   );
 }
 
-function AllClear({ upcoming, childName }: { upcoming: Instalment | null; childName: string }) {
+function AllClear({ upcoming, childName, lastPaid, onReceipt }: { upcoming: Instalment | null; childName: string; lastPaid: Instalment | null; onReceipt: (i: Instalment) => void }) {
   return (
     <Card className="p-5 sm:p-6">
       <div className="flex items-start gap-4">
@@ -236,6 +236,11 @@ function AllClear({ upcoming, childName }: { upcoming: Instalment | null; childN
             </p>
           ) : (
             <p className="mt-1 text-[13.5px] text-ink-2">All four instalments for this year are paid. Thank you.</p>
+          )}
+          {lastPaid && (
+            <Button variant="secondary" size="sm" className="mt-3" onClick={() => onReceipt(lastPaid)}>
+              <Download /> Receipt for {lastPaid.label}
+            </Button>
           )}
         </div>
       </div>

@@ -199,8 +199,7 @@ export function Overdue({
           <Table className="min-w-[880px]">
             <THead>
               <tr>
-                <Th className="w-10 !pr-0">
-                  <span className="sr-only">Select</span>
+                <Th className="w-10 !pr-0" aria-label="Select">
                   <input
                     type="checkbox"
                     aria-label="Select all on this page"
@@ -221,9 +220,7 @@ export function Overdue({
                 <SortTh label="Overdue" k="amount" sort={sort} onSort={onSort} align="right" />
                 <SortTh label="Days overdue" k="days" sort={sort} onSort={onSort} align="right" />
                 <Th>Last reminder</Th>
-                <Th className="w-12">
-                  <span className="sr-only">Actions</span>
-                </Th>
+                <Th className="w-12" aria-label="Actions" />
               </tr>
             </THead>
             <tbody>

@@ -56,6 +56,7 @@ function Tracker({ child, route: r }: { child: Student; route: Route }) {
   const status = describe({ child, r, l, c, amLog, pmLog, nowMin, skipping: skippingToday });
   const trackRun: Run = l.run ?? (l.phase === "done" || (l.phase === "parked" && !l.closed && amLog[n - 1]) ? "pm" : "am");
   const complete = l.phase === "done" || (l.phase === "parked" && !l.closed && !!amLog[n - 1] && trackRun === "am");
+  const parkedAt = onRoad(l) || l.closed || l.phase === "done" ? null : amLog[n - 1] ? n - 1 : 0;
   const times = r.stops.map((s, i) => clock(toMin(trackRun === "am" ? s.am : s.pm) + (onRoad(l) ? l.delay : 0)));
   const actualLog = trackRun === "am" ? amLog : pmLog;
   const actual = actualLog.map((d) => (d ? fmtTime(d) : null));
@@ -114,11 +115,11 @@ function Tracker({ child, route: r }: { child: Student; route: Route }) {
 
           {/* phones: vertical tracker; wider screens: the schematic line */}
           <div className="px-5 pt-5 pb-4 sm:hidden">
-            <RouteTrack route={r} run={trackRun} position={l.position} live={onRoad(l)} highlight={c} times={times} actual={actual} complete={complete} />
+            <RouteTrack route={r} run={trackRun} position={l.position} live={onRoad(l)} highlight={c} times={times} actual={actual} complete={complete} parkedAt={parkedAt} />
           </div>
           <div className="hidden px-6 pt-4 pb-2 sm:block">
             <div className="rounded-xl border border-line bg-surface-2 px-4 pt-1">
-              <RouteMap route={r} position={l.position} run={l.run} live={onRoad(l)} highlight={c} complete={complete} height={164} ariaLabel={`Route ${r.id} with ${child.firstName}'s stop, ${stop.name}, highlighted`} />
+              <RouteMap route={r} position={l.position} run={l.run} live={onRoad(l)} highlight={c} complete={l.phase === "done"} parkedAt={parkedAt} height={164} ariaLabel={`Route ${r.id} with ${child.firstName}'s stop, ${stop.name}, highlighted`} />
             </div>
           </div>
 
@@ -210,25 +211,25 @@ function WeekLog({ child, route: r, stopIdx: c, now, absences }: { child: Studen
     <Card>
       <CardHeader title="Last five school days" description={`When the bus reached ${r.stops[c].name.split(" · ").pop()} and the school, from its GPS log`} />
       <div className="scroll-thin overflow-x-auto">
-        <table className="w-full min-w-[420px] text-[13px]">
+        <table className="w-full min-w-[340px] text-[13px]">
           <thead className="bg-surface-2 text-[11.5px] font-semibold text-muted">
             <tr>
               <th className="h-9 border-y border-line pl-5 text-left font-semibold">Day</th>
-              <th className="h-9 border-y border-line px-3 text-right font-semibold">Picked up</th>
-              <th className="h-9 border-y border-line px-3 text-right font-semibold">At school</th>
+              <th className="h-9 border-y border-line px-2 text-right font-semibold sm:px-3">Picked up</th>
+              <th className="h-9 border-y border-line px-2 text-right font-semibold sm:px-3">At school</th>
               <th className="h-9 border-y border-line pr-5 text-right font-semibold">Dropped</th>
             </tr>
           </thead>
           <tbody className="tnum">
             {rows.map((x) => (
               <tr key={x.d.getTime()} className="border-b border-line last:border-b-0">
-                <td className="h-11 pl-5 text-ink-2">
+                <td className="h-11 pl-5 whitespace-nowrap text-ink-2">
                   {x.d.getTime() === today().getTime() ? "Today" : fmtWeekday(x.d)}
                   {x.off && <span className="ml-2 text-[11.5px] text-muted">didn't ride</span>}
                 </td>
-                <td className="px-3 text-right">{cell(x.am, x.amLate, x.off, r.stops[c].am)}</td>
-                <td className="px-3 text-right">{cell(x.school, 0, x.off, r.stops[n - 1].am)}</td>
-                <td className="pr-5 text-right">{cell(x.pm, x.pmLate, x.off, r.stops[c].pm)}</td>
+                <td className="px-2 text-right whitespace-nowrap sm:px-3">{cell(x.am, x.amLate, x.off, r.stops[c].am)}</td>
+                <td className="px-2 text-right whitespace-nowrap sm:px-3">{cell(x.school, 0, x.off, r.stops[n - 1].am)}</td>
+                <td className="pr-5 text-right whitespace-nowrap">{cell(x.pm, x.pmLate, x.off, r.stops[c].pm)}</td>
               </tr>
             ))}
           </tbody>
@@ -355,6 +356,11 @@ function describe({
       etaLabel: "Drop at your stop",
     };
   }
+  if (skipping)
+    return {
+      headline: `${name} is off the bus today`,
+      sub: `${r.attendant} won't wait at ${short}. Bus R${r.id.slice(1)} still runs as usual for everyone else, leaving ${r.stops[0].name.split(" · ")[0]} at ${clock(toMin(r.stops[0].am))}.`,
+    };
   return {
     headline: `Pickup at ${pickup}`,
     sub: `Bus ${r.id} leaves ${r.stops[0].name} at ${clock(toMin(r.stops[0].am))}. We'll alert you when it's two stops away.`,

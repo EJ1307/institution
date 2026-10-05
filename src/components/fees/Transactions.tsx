@@ -170,7 +170,7 @@ export function Transactions({ txns, focus, onFocusDone }: { txns: Transaction[]
                         {x.mode}
                       </span>
                     </Td>
-                    <Td className="tnum whitespace-nowrap text-ink-2">{fresh ? `Today, ${fmtTime(new Date(p.at!))}` : fmtDate(x.date)}</Td>
+                    <Td className="tnum whitespace-nowrap text-ink-2">{dateLabel(x.date, fresh ? new Date(p.at!) : null, t)}</Td>
                     <Td align="right" className="font-semibold text-ink">
                       {rupees(x.amount)}
                     </Td>
@@ -198,6 +198,14 @@ export function Transactions({ txns, focus, onFocusDone }: { txns: Transaction[]
       />
     </Card>
   );
+}
+
+function dateLabel(d: Date, at: Date | null, t: Date) {
+  const days = Math.round((t.getTime() - d.getTime()) / 86400000);
+  const time = at ? `, ${fmtTime(at)}` : "";
+  if (days === 0) return `Today${time}`;
+  if (days === 1) return `Yesterday${time}`;
+  return fmtDate(d);
 }
 
 export const MODE_DOT: Record<PaymentMode, string> = {

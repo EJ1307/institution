@@ -212,7 +212,9 @@ function RouteDetail({ route: r, now, riders, notRiding }: { route: Route; now: 
       setPlaying(false);
       return;
     }
-    setSimMin(runWindow(r, view).start - 2);
+    const log = runLog(r, replayDay, view, atMinutes(replayDay, 24 * 60 - 1));
+    const first = view === "am" ? log[0] : log[n - 1];
+    setSimMin(first ? first.getHours() * 60 + first.getMinutes() - 1 : runWindow(r, view).start - 1);
     setPlaying(true);
   }, [view, r]);
 
@@ -225,7 +227,7 @@ function RouteDetail({ route: r, now, riders, notRiding }: { route: Route; now: 
           setPlaying(false);
           return m;
         }
-        return Math.min(end, m + 0.25);
+        return Math.min(end, m + 0.5);
       });
     }, 200);
     return () => clearInterval(id);
@@ -240,6 +242,12 @@ function RouteDetail({ route: r, now, riders, notRiding }: { route: Route; now: 
   const passed = (i: number) => l.position !== null && (l.run === "am" ? i <= l.position : i >= l.position);
   const nextIdx = l.position === null || !l.run ? null : l.run === "am" ? Math.min(n - 1, Math.floor(l.position) + 1) : Math.max(0, Math.ceil(l.position) - 1);
   const win = view !== "live" ? runWindow(r, view) : null;
+  // when the bus isn't running: idle at the first stop before the morning run, at school between runs
+  const idle = {
+    complete: !onRoad(l) && !l.closed && l.phase === "done",
+    parkedAt: onRoad(l) || l.closed || l.phase === "done" ? null : view === "live" && amLog[n - 1] ? n - 1 : view === "pm" ? n - 1 : 0,
+  };
+  const loggedOn = replayDay.getTime() === today().getTime() ? "today" : `on ${fmtWeekday(replayDay)}`;
 
   const statusLine = l.closed
     ? l.label
@@ -289,6 +297,8 @@ function RouteDetail({ route: r, now, riders, notRiding }: { route: Route; now: 
             position={l.position}
             run={l.run}
             live={view === "live" && onRoad(l)}
+            complete={idle.complete}
+            parkedAt={idle.parkedAt}
             ariaLabel={`Schematic map of route ${r.id}: ${r.stops.map((s) => s.name).join(", ")}`}
             height={156}
           />
@@ -301,6 +311,8 @@ function RouteDetail({ route: r, now, riders, notRiding }: { route: Route; now: 
               live={view === "live" && onRoad(l)}
               times={r.stops.map((st) => clock(toMin((l.run ?? "am") === "am" ? st.am : st.pm) + (onRoad(l) ? l.delay : 0)))}
               rowHeight={50}
+              complete={idle.complete}
+              parkedAt={idle.parkedAt}
             />
           </div>
         </div>
@@ -397,7 +409,7 @@ function RouteDetail({ route: r, now, riders, notRiding }: { route: Route; now: 
               })}
             </tbody>
           </Table>
-          <p className="border-t border-line px-5 py-2.5 text-[11.5px] text-muted">Scheduled times; the actual time recorded by the bus's GPS today is shown beneath.</p>
+          <p className="border-t border-line px-5 py-2.5 text-[11.5px] text-muted">Scheduled times, with the time the bus's GPS recorded {loggedOn} beneath.</p>
         </div>
 
         <aside className="grid grid-cols-1 gap-px border-t border-line bg-line md:grid-cols-3">
