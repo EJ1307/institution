@@ -3,7 +3,7 @@
 
 import { hash01 } from "@/lib/rng";
 import { getState } from "@/lib/store";
-import { addDays, holidaysBetween, isoDate, nextSchoolDay, toSchoolDay, today } from "./calendar";
+import { addDays, fromIso, holidaysBetween, isoDate, nextSchoolDay, toSchoolDay, today } from "./calendar";
 import { latestExam, upcomingExam } from "./exams";
 import { examSubjects, SUBJECTS } from "./school";
 
@@ -124,7 +124,7 @@ export function notices(): Notice[] {
     ...n,
     category: n.category as Notice["category"],
     postedAt: new Date(n.postedAt),
-    reach: { read: 0, total: 1457 },
+    reach: { read: 0, total: n.reachTotal ?? 1457 },
   }));
   return [...posted, ...seeded].sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)) || b.postedAt.getTime() - a.postedAt.getTime());
 }
@@ -165,6 +165,9 @@ export function events(): SchoolEvent[] {
   for (const h of holidaysBetween(addDays(t, -7), addDays(t, 60))) {
     list.push({ id: `H${isoDate(h.date)}`, title: h.name, date: h.date, kind: "Holiday", audience: "School closed" });
   }
+  for (const e of getState().events ?? []) {
+    list.push({ ...e, kind: e.kind as SchoolEvent["kind"], date: fromIso(e.date), end: e.end ? fromIso(e.end) : undefined });
+  }
   return list.sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
@@ -183,6 +186,9 @@ export type Homework = {
   detail: string;
   assignedOn: Date;
   dueOn: Date;
+  /** set from the demo (Homework → Set homework) */
+  setBy?: string;
+  attachment?: string;
 };
 
 const TASKS: Record<string, [string, string][]> = {
@@ -219,6 +225,9 @@ export function homeworkFor(classKey: string, grade: string, section: string): H
         dueOn: nextSchoolDay(addDays(day, 1 + Math.floor(hash01("hwd", classKey, isoDate(day), sub) * 3))),
       });
     });
+  }
+  for (const h of getState().homework ?? []) {
+    if (h.classKey === classKey) out.push({ ...h, assignedOn: fromIso(h.assignedOn), dueOn: fromIso(h.dueOn) });
   }
   return out.sort((a, b) => b.assignedOn.getTime() - a.assignedOn.getTime());
 }

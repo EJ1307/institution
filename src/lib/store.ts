@@ -16,6 +16,39 @@ export type PostedNotice = {
   author: string;
   postedAt: string; // ISO datetime
   requiresAck: boolean;
+  /** structured audience, e.g. "school", "parents", "stage:Middle", "grade:7", "class:8-B", "route:R3", "staff:teaching" */
+  audienceKey?: string;
+  /** number of families / staff the notice goes to */
+  reachTotal?: number;
+  channels?: string[];
+  /** posted for later: postedAt is then the scheduled send time */
+  scheduled?: boolean;
+};
+
+/** A calendar event added from the demo (Calendar → Add event). */
+export type PostedEvent = {
+  id: string;
+  title: string;
+  date: string; // ISO date
+  end?: string; // ISO date, multi-day events
+  time?: string;
+  place?: string;
+  kind: string;
+  audience: string;
+  createdAt: string; // ISO datetime
+};
+
+/** Homework set by a teacher from the demo (Homework → Set homework). */
+export type PostedHomework = {
+  id: string;
+  classKey: string;
+  subject: string;
+  title: string;
+  detail: string;
+  assignedOn: string; // ISO date
+  dueOn: string; // ISO date
+  attachment?: string;
+  setBy: string;
 };
 
 /** A parent's leave application for their child. */
@@ -50,6 +83,14 @@ export type AppState = {
   reminders: Record<string, string>;
   /** read notification ids */
   readNotifications: Record<string, true>;
+  /** calendar events added in the demo */
+  events: PostedEvent[];
+  /** homework set in the demo */
+  homework: PostedHomework[];
+  /** noticeId → when the parent opened it */
+  noticesRead: Record<string, string>;
+  /** "notice:<id>" / "hw:<id>" → when non-responders were last reminded */
+  nudges: Record<string, string>;
   /** classKey|isoDate → when the teacher submitted the register, with notes on absences */
   registerMeta: Record<string, { submittedAt: string; notes: Record<string, string> }>;
   /** leave applied for a child by a parent (Attendance → Apply for leave) */
@@ -80,6 +121,10 @@ const initial: AppState = {
   homeworkDone: {},
   reminders: {},
   readNotifications: {},
+  events: [],
+  homework: [],
+  noticesRead: {},
+  nudges: {},
   registerMeta: {},
   studentLeave: [],
   attendanceAlerts: {},
