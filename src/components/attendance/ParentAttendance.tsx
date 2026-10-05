@@ -180,19 +180,19 @@ export function ParentAttendance() {
             <p className="mt-3 text-[12.5px] text-muted">
               In school {stats.term.present + stats.term.late} of {stats.term.total - stats.term.unmarked} school days.
             </p>
-          </Card>
-
-          <Card className="flex items-center gap-3 px-5 py-4">
-            <span className={cn("size-2.5 shrink-0 rounded-full", todayMark ? MARK_META[todayMark].dot : "border border-faint")} />
-            <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-medium text-ink">
-                {isActualToday ? "Today" : fmtWeekday(day)} · {todayMark ? (todayMark === "E" ? "On leave" : MARK_META[todayMark].label) : "Not marked yet"}
-              </p>
-              <p className="truncate text-[12px] text-muted">
-                {todayMark === "P" ? `${child.firstName} was marked present at 8:52 am` : todayMark === "L" ? "Arrived after the 8:00 am bell" : todayMark === "A" ? "If this is unexpected, call the front office" : todayMark === "E" ? "Approved leave" : "Registers close at 9:30 am"}
-              </p>
+            <div className="-mx-5 mt-4 -mb-5 flex items-center gap-3 border-t border-line px-5 py-3.5">
+              <span className={cn("size-2.5 shrink-0 rounded-full", todayMark ? MARK_META[todayMark].dot : "border border-faint")} />
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-medium text-ink">
+                  {isActualToday ? "Today" : fmtWeekday(day)} · {todayMark ? (todayMark === "E" ? "On leave" : MARK_META[todayMark].label) : "Not marked yet"}
+                </p>
+                <p className="truncate text-[12px] text-muted">
+                  {todayMark === "P" ? `${child.firstName} was marked present at 8:52 am` : todayMark === "L" ? "Arrived after the 8:00 am bell" : todayMark === "A" ? "If this is unexpected, call the front office" : todayMark === "E" ? "Approved leave" : "Registers close at 9:30 am"}
+                </p>
+              </div>
             </div>
           </Card>
+
 
           <Card>
             <CardHeader title="Term at a glance" description="Each square is a school day" />
@@ -272,7 +272,7 @@ export function ParentAttendance() {
                     aria-label={label}
                     aria-pressed={!!sel}
                     className={cn(
-                      "relative flex h-11 flex-col items-start justify-between rounded-lg p-1.5 text-left transition-shadow sm:h-[60px] sm:p-2",
+                      "relative flex h-11 flex-col items-start justify-between rounded-lg p-1.5 text-left transition-shadow sm:h-[60px] sm:p-2 xl:h-[70px]",
                       CELL[c.kind],
                       c.kind === "future" && lv && "border border-dashed border-info bg-info-soft/40 text-info",
                       isToday && "ring-2 ring-brand ring-offset-1 ring-offset-surface",
