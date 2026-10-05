@@ -14,7 +14,8 @@ import { feeAccount } from "@/lib/data/fees";
 import { classTeacher } from "@/lib/data/people";
 import { classLabel, hasMarks } from "@/lib/data/school";
 import { busStatus, ROUTE_BY_ID } from "@/lib/data/transport";
-import { fmtDay, fmtWeekday, fmtWeekdayLong, greeting, percent, relativeDays, rupees } from "@/lib/format";
+import { fmtClock, fmtDay, fmtWeekday, fmtWeekdayLong, greeting, percent, relativeDays, rupees } from "@/lib/format";
+import { stopIndexFor } from "@/components/transport/live";
 import { useChild } from "@/lib/session";
 import { getState, setState, useAppState } from "@/lib/store";
 
@@ -52,6 +53,7 @@ export function ParentDashboard() {
   const report = hasMarks(child.grade) ? reportCard(child, latestExam()) : null;
   const route = child.routeId ? ROUTE_BY_ID[child.routeId] : null;
   const bus = route ? busStatus(route, now) : null;
+  const myStop = route ? route.stops[stopIndexFor(child, route)] : null;
   const hw = useMemo(() => homeworkFor(child.classKey, child.grade, child.section).filter((h) => h.dueOn >= today()).slice(0, 4), [child]);
   const needAck = notices().filter((n) => n.requiresAck && /parents/i.test(n.audience) && (n.audience.includes("All") || n.audience.includes(gradeWord(child.grade)) || n.audience.includes(child.routeId ?? "—")));
 
@@ -167,13 +169,17 @@ export function ParentDashboard() {
                   Route {route.id} · {route.name} · {route.bus}
                 </p>
                 <div className="mt-4 rounded-xl bg-surface-2 px-4 py-3 text-[12.5px]">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between gap-3">
+                    <span className="text-muted">Stop</span>
+                    <span className="truncate font-medium">{myStop!.name.split(" · ")[0]}</span>
+                  </div>
+                  <div className="mt-1.5 flex justify-between">
                     <span className="text-muted">Pick-up</span>
-                    <span className="tnum font-medium">{route.stops[0].am} am</span>
+                    <span className="tnum font-medium">{fmtClock(myStop!.am)}</span>
                   </div>
                   <div className="mt-1.5 flex justify-between">
                     <span className="text-muted">Drop</span>
-                    <span className="tnum font-medium">{route.stops[0].pm.replace(/^14/, "2").replace(/^15/, "3")} pm</span>
+                    <span className="tnum font-medium">{fmtClock(myStop!.pm)}</span>
                   </div>
                   <div className="mt-1.5 flex justify-between">
                     <span className="text-muted">Attendant</span>

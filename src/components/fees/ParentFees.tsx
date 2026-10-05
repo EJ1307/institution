@@ -1,7 +1,8 @@
 "use client";
 
 import { ArrowRight, CalendarClock, Check, CheckCircle2, Download, HandCoins, Mail, Phone } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { PageHeader } from "@/components/ui/layout";
 import { Badge, Button, Card, CardHeader, cn } from "@/components/ui/primitives";
 import { academicYear, addDays, today } from "@/lib/data/calendar";
@@ -20,6 +21,15 @@ export function ParentFees() {
   const acc = useMemo(() => feeAccount(child), [child, payments]);
   const [paying, setPaying] = useState<Instalment | null>(null);
   const [receipt, setReceipt] = useState<ReceiptData | null>(null);
+
+  // "Pay" on the parent home links here with ?pay=1: open the payment sheet straight away
+  const params = useSearchParams();
+  const wantsPay = params.get("pay") === "1";
+  useEffect(() => {
+    if (!wantsPay || !acc.nextDue) return;
+    setPaying(acc.nextDue);
+    window.history.replaceState(null, "", "/fees");
+  }, [wantsPay]);
 
   const t = today();
   const ay = academicYear(t);
