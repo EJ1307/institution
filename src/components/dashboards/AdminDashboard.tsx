@@ -64,7 +64,6 @@ export function AdminDashboard() {
   }, [ay.start, day]);
 
   const unmarked = att.grid.filter((g) => !isMarked(g.key, day));
-  const lowest = [...att.grid].filter((g) => isMarked(g.key, day)).sort((a, b) => a.rate - b.rate)[0];
   const lateBus = ROUTES.map((r) => ({ r, s: busStatus(r, new Date()) })).find((x) => x.s.delay > 2 && (x.s.phase === "morning" || x.s.phase === "afternoon"));
 
   const collectedPct = fees.collected / (fees.billed || 1);
@@ -128,7 +127,7 @@ export function AdminDashboard() {
               <span className="text-[16px] font-medium text-muted">/{staffNow.presence.total}</span>
             </span>
           }
-          sub={`${plural(staffNow.onLeave.length, "on leave")} · ${staffNow.pending.length} pending`}
+          sub={`${staffNow.onLeave.length} on leave · ${staffNow.pending.length} leave ${staffNow.pending.length === 1 ? "request" : "requests"} pending`}
         />
         <Stat
           href="/admissions"
@@ -158,7 +157,7 @@ export function AdminDashboard() {
               target={{ value: 0.92, label: "Target 92%" }}
               area
               endLabel
-              height={232}
+              height={268}
             />
             <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-5">
               {[
@@ -219,14 +218,6 @@ export function AdminDashboard() {
                 title={`${plural(staffNow.pending.length, "leave request")} to approve`}
                 body={staffNow.pending.slice(0, 3).map((l) => `${l.staff.title} ${l.staff.lastName}`).join(", ")}
                 action={<ButtonLink href="/staff?tab=leave" size="sm" variant="secondary">Review</ButtonLink>}
-              />
-            )}
-            {lowest && lowest.rate < 0.88 && (
-              <Attention
-                tone="warn"
-                icon={<ClipboardCheck />}
-                title={`${lowest.label} at ${percent(lowest.rate, 0)} today`}
-                body={`${lowest.absent + lowest.leave} of ${lowest.total} absent — lowest in school.`}
               />
             )}
             {lateBus && (
