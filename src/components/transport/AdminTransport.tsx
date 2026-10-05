@@ -293,15 +293,15 @@ function RouteDetail({ route: r, now, riders, notRiding }: { route: Route; now: 
         <div className="rounded-xl border border-line bg-surface-2 px-4 pt-2 pb-1">
           <div className="hidden sm:block">
             <RouteMap
-            route={r}
-            position={l.position}
-            run={l.run}
-            live={view === "live" && onRoad(l)}
-            complete={idle.complete}
-            parkedAt={idle.parkedAt}
-            ariaLabel={`Schematic map of route ${r.id}: ${r.stops.map((s) => s.name).join(", ")}`}
-            height={156}
-          />
+              route={r}
+              position={l.position}
+              run={l.run}
+              live={view === "live" && onRoad(l)}
+              complete={idle.complete}
+              parkedAt={idle.parkedAt}
+              ariaLabel={`Schematic map of route ${r.id}: ${r.stops.map((s) => s.name).join(", ")}`}
+              height={156}
+            />
           </div>
           <div className="py-3 sm:hidden">
             <RouteTrack
@@ -412,25 +412,25 @@ function RouteDetail({ route: r, now, riders, notRiding }: { route: Route; now: 
           <p className="border-t border-line px-5 py-2.5 text-[11.5px] text-muted">Scheduled times, with the time the bus's GPS recorded {loggedOn} beneath.</p>
         </div>
 
-        <aside className="grid grid-cols-1 gap-px border-t border-line bg-line md:grid-cols-3">
+        <aside className="grid grid-cols-1 gap-px border-t border-line bg-line sm:grid-cols-2">
           <section className="bg-surface px-5 py-4">
             <p className="text-[11.5px] font-semibold tracking-[0.04em] text-muted uppercase">Crew</p>
             <Crew name={r.driver} role="Driver" phone={r.driverPhone} />
             <Crew name={r.attendant} role="Attendant" phone={details.attendantPhone} />
-          </section>
 
-          <section className="bg-surface px-5 py-4">
-            <p className="text-[11.5px] font-semibold tracking-[0.04em] text-muted uppercase">Seats</p>
-            <div className="mt-2.5 flex items-baseline justify-between text-[13px]">
-              <span>
-                <span className="tnum font-semibold text-ink">{riders}</span> <span className="text-muted">of {r.capacity} assigned</span>
-              </span>
-              <span className="tnum text-[12px] text-muted">{plural(r.capacity - riders, "seat")} free</span>
+            <div className="mt-5">
+              <p className="text-[11.5px] font-semibold tracking-[0.04em] text-muted uppercase">Seats</p>
+              <div className="mt-2.5 flex items-baseline justify-between text-[13px]">
+                <span>
+                  <span className="tnum font-semibold text-ink">{riders}</span> <span className="text-muted">of {r.capacity} assigned</span>
+                </span>
+                <span className="tnum text-[12px] text-muted">{plural(r.capacity - riders, "seat")} free</span>
+              </div>
+              <Meter value={riders / r.capacity} className="mt-2" label="Seats assigned" tone={riders / r.capacity > 0.95 ? "warn" : "brand"} />
+              <p className="mt-2.5 text-[12px] leading-snug text-muted">
+                {details.model} · {notRiding.length ? `${plural(notRiding.length, "student")} not riding today` : "everyone riding today"}
+              </p>
             </div>
-            <Meter value={riders / r.capacity} className="mt-2" label="Seats assigned" tone={riders / r.capacity > 0.95 ? "warn" : "brand"} />
-            <p className="mt-2.5 text-[12px] leading-snug text-muted">
-              {details.model} · {notRiding.length ? `${plural(notRiding.length, "student")} not riding today` : "everyone riding today"}
-            </p>
           </section>
 
           <section className="bg-surface px-5 py-4">
@@ -446,28 +446,26 @@ function RouteDetail({ route: r, now, riders, notRiding }: { route: Route; now: 
                 );
               })}
             </ul>
+            <p className="mt-5 text-[11.5px] font-semibold tracking-[0.04em] text-muted uppercase">Not riding today</p>
+            {notRiding.length === 0 ? (
+              <p className="mt-1.5 text-[12.5px] text-muted">No absences reported by parents on this route.</p>
+            ) : (
+              <ul className="mt-1.5">
+                {notRiding.map(({ s, at }) => (
+                  <li key={s.id} className="flex items-center gap-2.5 py-1.5 text-[12.5px]">
+                    <Avatar name={s.name} size={24} />
+                    <span className="min-w-0 flex-1 truncate">
+                      <span className="font-medium text-ink">{s.name}</span> <span className="text-muted">· {classLabel(s.grade, s.section)}</span>
+                    </span>
+                    <span className="tnum shrink-0 text-muted">{fmtTime(new Date(at))}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
         </aside>
       </div>
 
-      <div className="border-t border-line px-5 py-3.5">
-        <p className="text-[12.5px] font-medium text-ink">Not riding today</p>
-        {notRiding.length === 0 ? (
-          <p className="mt-0.5 text-[12.5px] text-muted">No absences reported by parents on this route.</p>
-        ) : (
-          <ul className="mt-2 flex flex-wrap gap-2">
-            {notRiding.map(({ s, at }) => (
-              <li key={s.id} className="flex items-center gap-2 rounded-full border border-line bg-surface-2 py-1 pr-3 pl-1 text-[12.5px]">
-                <Avatar name={s.name} size={22} />
-                <span className="font-medium">{s.name}</span>
-                <span className="text-muted">
-                  {classLabel(s.grade, s.section)} · reported {fmtTime(new Date(at))}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
     </Card>
   );
 }
