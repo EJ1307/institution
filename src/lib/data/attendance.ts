@@ -4,7 +4,7 @@
 
 import { hash01 } from "@/lib/rng";
 import { getState, setState, type AttendanceMark } from "@/lib/store";
-import { addDays, isoDate, isSchoolDay, lastSchoolDay, schoolDaysBack, today } from "./calendar";
+import { addDays, isoDate, isSchoolDay, lastSchoolDay, nextSchoolDay, schoolDaysBack, toSchoolDay, today } from "./calendar";
 import { CLASSES, GRADE_BY_ID } from "./school";
 import { staff, students, studentsInClass, type Staff, type Student } from "./people";
 
@@ -179,11 +179,16 @@ export function leaveRequests(): LeaveRequest[] {
   for (let i = 0; i < 11; i++) {
     const s = pool[Math.floor(hash01("leave-staff", i, isoDate(d0).slice(0, 7)) * pool.length)];
     if (out.some((o) => o.staff.id === s.id)) continue;
-    const type = types[Math.floor(hash01("leave-type", i) * types.length)];
+    let type = types[Math.floor(hash01("leave-type", i) * types.length)];
+    // duty leave (evaluator training, accompanying a team) is for teachers only
+    if (type === "On duty" && s.category !== "Teaching" && s.category !== "Co-curricular") type = "Casual";
     const offset = i < 5 ? -Math.floor(hash01("lo", i) * 2) : 1 + Math.floor(hash01("lo", i) * 9);
-    const from = addDays(d0, offset);
+    // leave always starts and ends on school days
+    const raw = addDays(d0, offset);
+    const from = offset <= 0 ? lastSchoolDay(raw) : toSchoolDay(raw);
     const days = type === "Earned" ? 3 : type === "Sick" ? 1 + Math.floor(hash01("ld", i) * 2) : 1;
-    const to = addDays(from, days - 1);
+    let to = from;
+    for (let n = 1; n < days; n++) to = nextSchoolDay(to);
     const reasons = REASONS[type];
     const decided = getState().leaveDecisions[`L${i}`];
     const status: LeaveRequest["status"] = decided ?? (i < 5 ? "approved" : i < 7 && hash01("ls", i) < 0.5 ? "approved" : "pending");
