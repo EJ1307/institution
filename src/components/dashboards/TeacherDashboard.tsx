@@ -8,7 +8,8 @@ import { PageHeader, Stat } from "@/components/ui/layout";
 import { Avatar, Badge, ButtonLink, Card, CardBody, CardHeader, cn } from "@/components/ui/primitives";
 import { classDay, currentSchoolDay, isMarked, studentSummary } from "@/lib/data/attendance";
 import { academicYear, isSchoolDay, schoolDaysBetween, today } from "@/lib/data/calendar";
-import { homeworkFor, notices, upcomingEvents } from "@/lib/data/communication";
+import { notices, upcomingEvents } from "@/lib/data/communication";
+import { dueLabel, tally, teacherHomework } from "@/components/homework/model";
 import { classResults, latestExam, upcomingExam } from "@/lib/data/exams";
 import { studentsInClass } from "@/lib/data/people";
 import { GRADE_BY_ID, PERIODS, TEACHING_PERIODS, classLabel, type GradeId } from "@/lib/data/school";
@@ -72,14 +73,10 @@ export function TeacherDashboard() {
       .slice(0, 5);
   }, [day, exam]);
 
+  const postedHomework = useAppState((st) => st.homework);
   const homework = useMemo(
-    () =>
-      myClasses
-        .flatMap((k) => homeworkFor(k, k.split("-")[0], k.split("-")[1]))
-        .filter((h) => h.subject === "Mathematics")
-        .sort((a, b) => b.assignedOn.getTime() - a.assignedOn.getTime())
-        .slice(0, 3),
-    [myClasses],
+    () => teacherHomework(teacher.id, `${teacher.title} ${teacher.name}`).filter((h) => h.mine).slice(0, 3),
+    [teacher.id, postedHomework],
   );
   const teaching = todays.filter(Boolean).length;
   const first = teacher.firstName;
@@ -227,23 +224,23 @@ export function TeacherDashboard() {
           <Card>
             <CardHeader title="Homework you set" icon={<NotebookPen />} action={<ButtonLink href="/homework" variant="ghost" size="sm">All</ButtonLink>} />
             <ul className="px-5 pb-4">
-              {homework.map((h, i) => {
-                const total = studentsInClass(h.classKey).length;
-                const done = Math.round(total * (0.62 + i * 0.13));
+              {homework.map((h) => {
+                const t = tally(h);
                 return (
                   <li key={h.id} className="border-t border-line py-2.5 first:border-t-0 first:pt-0">
                     <p className="truncate text-[13px] font-medium">{h.title}</p>
-                    <div className="mt-1 flex items-center justify-between text-[12px] text-muted">
-                      <span>
-                        {classLabel(h.classKey.split("-")[0] as GradeId, h.classKey.split("-")[1])} · due {relativeDays(h.dueOn, today()).toLowerCase()}
+                    <div className="mt-1 flex items-center justify-between gap-3 text-[12px] text-muted">
+                      <span className="truncate">
+                        {classLabel(h.classKey.split("-")[0] as GradeId, h.classKey.split("-")[1])} · {dueLabel(h.dueOn).toLowerCase()}
                       </span>
-                      <span className="tnum">
-                        {Math.min(total, done)}/{total} submitted
+                      <span className="tnum shrink-0">
+                        {t.submitted + t.late}/{t.total} handed in
                       </span>
                     </div>
                   </li>
                 );
               })}
+              {homework.length === 0 && <li className="py-2 text-[13px] text-muted">No homework set this week.</li>}
             </ul>
           </Card>
         </div>
