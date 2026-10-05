@@ -18,7 +18,17 @@ export function currentSchoolDay(): Date {
   return lastSchoolDay(today());
 }
 
+// dayFactor is a pure function of the date and sits on the hot path (every
+// student × every day in a trend), so it is memoised per calendar day.
+const factorCache = new Map<number, number>();
 function dayFactor(d: Date): number {
+  const k = d.getTime();
+  let f = factorCache.get(k);
+  if (f === undefined) factorCache.set(k, (f = computeDayFactor(d)));
+  return f;
+}
+
+function computeDayFactor(d: Date): number {
   let f = 1;
   const w = d.getDay();
   if (w === 1) f -= 0.012;
@@ -49,8 +59,9 @@ function registerKey(classKey: string, d: Date) {
 
 /** Is the register for this class/date marked (generated history counts as marked)? */
 export function isMarked(classKey: string, d: Date): boolean {
+  if (!UNMARKED_TODAY.has(classKey)) return true;
   const iso = isoDate(d);
-  if (iso === isoDate(currentSchoolDay()) && UNMARKED_TODAY.has(classKey)) {
+  if (iso === isoDate(currentSchoolDay())) {
     return Boolean(getState().attendance[registerKey(classKey, d)]);
   }
   return true;
@@ -187,7 +198,7 @@ export function leaveRequests(): LeaveRequest[] {
       reason: reasons[Math.floor(hash01("lr", i) * reasons.length)],
       appliedOn: addDays(from, -(1 + Math.floor(hash01("la", i) * 6))),
       status,
-      substitute: status === "approved" && s.category === "Teaching" ? `${sub.title} ${sub.name}` : null,
+      substitute: status === "approved" && s.category === "Teaching" ? (getState().leaveSubstitutes?.[`L${i}`] ?? `${sub.title} ${sub.name}`) : null,
     });
   }
   return out;

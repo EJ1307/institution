@@ -18,6 +18,17 @@ export type PostedNotice = {
   requiresAck: boolean;
 };
 
+/** A parent's leave application for their child. */
+export type StudentLeave = {
+  id: string;
+  studentId: string;
+  from: string; // ISO date
+  to: string; // ISO date
+  reason: string;
+  details: string;
+  appliedAt: string; // ISO datetime
+};
+
 export type AppState = {
   session: { role: Role; userId: string; name: string } | null;
   /** parent view: which child is selected */
@@ -39,6 +50,18 @@ export type AppState = {
   reminders: Record<string, string>;
   /** read notification ids */
   readNotifications: Record<string, true>;
+  /** classKey|isoDate → when the teacher submitted the register, with notes on absences */
+  registerMeta: Record<string, { submittedAt: string; notes: Record<string, string> }>;
+  /** leave applied for a child by a parent (Attendance → Apply for leave) */
+  studentLeave: StudentLeave[];
+  /** studentId → when parents were alerted about low attendance */
+  attendanceAlerts: Record<string, string>;
+  /** examId|classKey|subjectId → marks entered in the gradebook */
+  gradebook: Record<string, { marks: Record<string, number | "AB">; submittedAt?: string }>;
+  /** examId → when report cards were published to parents */
+  reportCardsPublished: Record<string, string>;
+  /** isoDate|teacherId|periodIndex → substitute teacher id */
+  substitutions: Record<string, string>;
   /** studentId|isoDate → reported at: parent says the child won't take the bus that day */
   busAbsence: Record<string, string>;
 };
@@ -57,6 +80,12 @@ const initial: AppState = {
   homeworkDone: {},
   reminders: {},
   readNotifications: {},
+  registerMeta: {},
+  studentLeave: [],
+  attendanceAlerts: {},
+  gradebook: {},
+  reportCardsPublished: {},
+  substitutions: {},
   busAbsence: {},
 };
 
