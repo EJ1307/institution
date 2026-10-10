@@ -135,7 +135,7 @@ export function CalendarView() {
             <Button
               variant="secondary"
               onClick={() => {
-                void navigator.clipboard?.writeText("https://amaltas.kaksha.in/calendar.ics").catch(() => {});
+                void navigator.clipboard?.writeText("https://laburnumacademy.org/calendar.ics").catch(() => {});
                 toast({ title: "Calendar link copied", body: "Add it to Google Calendar under Other calendars → From URL. It stays in sync.", tone: "info" });
               }}
             >

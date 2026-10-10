@@ -10,7 +10,7 @@ import { addDays, isoDate, today } from "@/lib/data/calendar";
 import { ledger } from "@/lib/data/fees";
 import { students } from "@/lib/data/people";
 import { classLabel, examSubjects } from "@/lib/data/school";
-import { fmtDay, number, percent, rupeesCompact } from "@/lib/format";
+import { fmtDay, number, percent, dollarsCompact } from "@/lib/format";
 import { setState, useAppState } from "@/lib/store";
 
 type Integration = {
@@ -46,7 +46,7 @@ export function IntegrationsSection() {
     const rows = L.txns.filter((x) => x.date >= from);
     downloadCsv(
       `fee-vouchers-${isoDate(from)}-to-${isoDate(today())}.csv`,
-      ["Voucher date", "Receipt no.", "Ledger", "Student", "Class", "Admission no.", "Instalment", "Mode", "Amount (INR)"],
+      ["Voucher date", "Receipt no.", "Ledger", "Student", "Class", "Admission no.", "Instalment", "Mode", "Amount (USD)"],
       rows.map((x) => [isoDate(x.date), x.receipt, x.mode === "Cash" ? "Cash in hand" : "Bank — current account", x.student.name, classLabel(x.student.grade, x.student.section), x.student.admissionNo, x.instalment, x.mode, x.amount]),
     );
     toast({ title: `${number(rows.length)} vouchers exported`, body: "Fee receipts from the last 30 days, ready to import into your accounting software." });
@@ -75,7 +75,7 @@ export function IntegrationsSection() {
       meta: (on) =>
         on
           ? [
-              { k: "Collected online this year", v: `${rupeesCompact(online)} · ${percent(online / (L.collected || 1), 0)} of fees` },
+              { k: "Collected online this year", v: `${dollarsCompact(online)} · ${percent(online / (L.collected || 1), 0)} of fees` },
               { k: "Settlement", v: "T+1 to current a/c ••4471" },
             ]
           : [{ k: "Status", v: "Parents can only pay at the accounts counter" }],
@@ -132,7 +132,7 @@ export function IntegrationsSection() {
       meta: (on) =>
         on
           ? [
-              { k: "Domain", v: "amaltas.edu.in" },
+              { k: "Domain", v: "laburnumacademy.org" },
               { k: "Staff signed in via SSO", v: "104 of 109" },
             ]
           : [{ k: "Today", v: "Portal passwords + two-step verification" }],
@@ -156,7 +156,7 @@ export function IntegrationsSection() {
     setState((st) => ({ settings: { ...st.settings, integrations: { ...st.settings.integrations, [i.id]: v } } }));
     toast(
       v
-        ? { title: `${i.title} connected`, body: i.id === "sso" ? "Setup steps have gone to it@amaltas.edu.in. Staff can keep using passwords until you switch over." : "It's live for the whole school." }
+        ? { title: `${i.title} connected`, body: i.id === "sso" ? "Setup steps have gone to it@laburnumacademy.org. Staff can keep using passwords until you switch over." : "It's live for the whole school." }
         : { title: `${i.title} paused`, body: "Nothing is deleted — reconnect any time.", tone: "info" },
     );
   };

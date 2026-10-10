@@ -4,7 +4,7 @@ import { Badge, cn } from "@/components/ui/primitives";
 import type { FeeAccount } from "@/lib/data/fees";
 import type { Student } from "@/lib/data/people";
 import { HOUSES } from "@/lib/data/school";
-import { rupees } from "@/lib/format";
+import { dollars } from "@/lib/format";
 
 export type FeeState = "clear" | "due" | "overdue";
 
@@ -28,7 +28,7 @@ export function FeeBadge({ acc, compact }: { acc: FeeAccount; compact?: boolean 
   return (
     <Badge tone={st === "overdue" ? "bad" : "warn"} className="tnum">
       {st === "overdue" ? "Overdue" : "Due"}
-      {!compact && <span className="font-semibold">{rupees(st === "overdue" ? acc.overdue : acc.outstanding)}</span>}
+      {!compact && <span className="font-semibold">{dollars(st === "overdue" ? acc.overdue : acc.outstanding)}</span>}
     </Badge>
   );
 }
@@ -71,7 +71,7 @@ function csvCell(v: unknown) {
 
 export function downloadCsv(filename: string, header: string[], rows: (string | number | null)[][]) {
   const body = [header, ...rows].map((r) => r.map(csvCell).join(",")).join("\r\n");
-  // BOM so spreadsheet apps read ₹ and names correctly
+  // BOM so spreadsheet apps read names correctly
   const blob = new Blob(["﻿" + body], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

@@ -9,7 +9,7 @@ import { LATE_FEE, ledger } from "@/lib/data/fees";
 import { students } from "@/lib/data/people";
 import { GRADES, INSTALMENTS, TRANSPORT_QUARTERLY, annualTuition, instalmentDue } from "@/lib/data/school";
 import { ROUTES } from "@/lib/data/transport";
-import { fmtDate, fmtDay, number, percent, plural, rupees, rupeesCompact } from "@/lib/format";
+import { fmtDate, fmtDay, number, percent, plural, dollars, dollarsCompact } from "@/lib/format";
 import { useAppState } from "@/lib/store";
 import { GRACE_DAYS, invoiceDate, lateFeeFrom } from "./lib";
 
@@ -74,8 +74,8 @@ export function FeeStructure() {
                   <p className="text-[12px] text-muted">{b.grades.join(", ")}</p>
                 </Td>
                 <Td align="right" className="text-ink-2">{number(b.count)}</Td>
-                <Td align="right" className="text-ink-2">{rupees(b.fee / 4)}</Td>
-                <Td align="right" className="font-semibold text-ink">{rupees(b.fee)}</Td>
+                <Td align="right" className="text-ink-2">{dollars(b.fee / 4)}</Td>
+                <Td align="right" className="font-semibold text-ink">{dollars(b.fee)}</Td>
               </Tr>
             ))}
           </tbody>
@@ -87,7 +87,7 @@ export function FeeStructure() {
       </Card>
 
       <Card>
-        <CardHeader title="Instalment schedule" description={`Invoices go out 25 days ahead · ${rupees(LATE_FEE)} late fee after ${GRACE_DAYS} days`} />
+        <CardHeader title="Instalment schedule" description={`Invoices go out 25 days ahead · ${dollars(LATE_FEE)} late fee after ${GRACE_DAYS} days`} />
         <ol className="px-5 pb-4">
           {INSTALMENTS.map((ins, i) => {
             const due = instalmentDue(ins.id, ay.startYear);
@@ -105,7 +105,7 @@ export function FeeStructure() {
                   ) : state === "open" ? (
                     <Badge tone="warn">Open</Badge>
                   ) : state === "overdue" ? (
-                    <Badge tone="bad">{rupeesCompact(b.overdue)} overdue</Badge>
+                    <Badge tone="bad">{dollarsCompact(b.overdue)} overdue</Badge>
                   ) : (
                     <Badge tone="good">Collected</Badge>
                   )}
@@ -126,7 +126,7 @@ export function FeeStructure() {
       </Card>
 
       <Card className="xl:col-span-2">
-        <CardHeader title="Concessions" icon={<HandCoins />} description={`${plural(conc.reduce((a, c) => a + c.count, 0), "student")} · ${rupeesCompact(concTotal)} of tuition waived this year`} />
+        <CardHeader title="Concessions" icon={<HandCoins />} description={`${plural(conc.reduce((a, c) => a + c.count, 0), "student")} · ${dollarsCompact(concTotal)} of tuition waived this year`} />
         <Table className="min-w-[620px]">
           <THead>
             <tr>
@@ -145,7 +145,7 @@ export function FeeStructure() {
                 </Td>
                 <Td align="right" className="text-ink-2">{c.pct}%</Td>
                 <Td align="right" className="text-ink-2">{number(c.count)}</Td>
-                <Td align="right" className="font-semibold text-ink">{rupees(c.value)}</Td>
+                <Td align="right" className="font-semibold text-ink">{dollars(c.value)}</Td>
               </Tr>
             ))}
           </tbody>
@@ -156,10 +156,10 @@ export function FeeStructure() {
         <CardHeader title="Transport" icon={<Bus />} description="Same fee on every route, billed with tuition" />
         <CardBody>
           <div className="flex items-baseline gap-2">
-            <span className="tnum text-[26px] leading-none font-semibold tracking-[-0.02em]">{rupees(TRANSPORT_QUARTERLY)}</span>
+            <span className="tnum text-[26px] leading-none font-semibold tracking-[-0.02em]">{dollars(TRANSPORT_QUARTERLY)}</span>
             <span className="text-[12.5px] text-muted">per quarter</span>
           </div>
-          <p className="tnum mt-1.5 text-[12.5px] text-muted">{rupees(TRANSPORT_QUARTERLY * 4)} a year · both ways</p>
+          <p className="tnum mt-1.5 text-[12.5px] text-muted">{dollars(TRANSPORT_QUARTERLY * 4)} a year · both ways</p>
           <dl className="mt-4 divide-y divide-line border-t border-line text-[13px]">
             <div className="flex justify-between py-2">
               <dt className="text-muted">Routes</dt>
@@ -171,10 +171,10 @@ export function FeeStructure() {
             </div>
             <div className="flex justify-between py-2">
               <dt className="text-muted">Billed this year</dt>
-              <dd className="tnum text-ink">{rupeesCompact(riders * TRANSPORT_QUARTERLY * 4)}</dd>
+              <dd className="tnum text-ink">{dollarsCompact(riders * TRANSPORT_QUARTERLY * 4)}</dd>
             </div>
           </dl>
-          <p className="mt-3 text-[12px] leading-relaxed text-muted">Changes take effect from the next quarter. Families opt in or out by writing to transport@amaltas.edu.in before the invoice date.</p>
+          <p className="mt-3 text-[12px] leading-relaxed text-muted">Changes take effect from the next quarter. Families opt in or out by writing to transport@laburnumacademy.org before the invoice date.</p>
         </CardBody>
       </Card>
     </div>

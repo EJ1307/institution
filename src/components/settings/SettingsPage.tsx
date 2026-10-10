@@ -106,7 +106,7 @@ export function SettingsPage() {
             })}
             <li className="mt-4 flex items-start gap-2.5 rounded-lg border border-dashed border-line-strong px-3 py-2.5 text-[12px] leading-snug text-muted">
               <Database className="mt-0.5 size-3.5 shrink-0" />
-              <span>Data stored in India. Every change here is recorded in the audit log.</span>
+              <span>Every change here is recorded in the audit log.</span>
             </li>
           </ul>
         </nav>

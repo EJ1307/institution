@@ -6,7 +6,7 @@ import { ADMISSION_STAGES, type AdmissionStage, type Application } from "@/lib/d
 import { academicYear, addDays } from "@/lib/data/calendar";
 import { GRADE_BY_ID, type GradeId } from "@/lib/data/school";
 import type { AdmissionNote } from "@/lib/store";
-import { rupees } from "@/lib/format";
+import { dollars } from "@/lib/format";
 
 export const STAGES = ADMISSION_STAGES as readonly AdmissionStage[];
 
@@ -65,7 +65,7 @@ export type TimelineItem = { at: Date; title: string; body?: string; kind: "syst
 const SOURCE_TEXT: Record<string, string> = {
   Website: "Enquiry form submitted on the school website",
   "Walk-in": "Walked in at the admissions office",
-  "Parent referral": "Referred by a current Amaltas parent",
+  "Parent referral": "Referred by a current Laburnum parent",
   Instagram: "Responded to the admissions post on Instagram",
   "School fair": "Met the admissions team at a school fair",
   Newspaper: "Responded to the newspaper advertisement",
@@ -100,7 +100,7 @@ export function timelineFor(a: Application, notes: AdmissionNote[] = []): Timeli
       body: a.score ? `Assessed by the ${GRADE_BY_ID[a.grade].order <= 7 ? "Headmistress, Junior School" : "Senior School coordinator"} · score ${a.score}/100` : "Completed — outcome to be shared",
       kind: "milestone",
     });
-  if (reached >= 3) items.push({ at: at(3), title: "Offer letter issued", body: `Seat held for 7 days · admission fee ${rupees(GRADE_BY_ID[a.grade].order <= 2 ? 55_000 : 75_000)}`, kind: "milestone" });
+  if (reached >= 3) items.push({ at: at(3), title: "Offer letter issued", body: `Seat held for 7 days · admission fee ${dollars(GRADE_BY_ID[a.grade].order <= 2 ? 55_000 : 75_000)}`, kind: "milestone" });
   if (reached >= 4) items.push({ at: at(4), title: "Fee paid — admission confirmed", body: "Paid online by UPI · admission number will be allotted in April", kind: "milestone" });
   if (withdrawn) items.push({ at: a.lastActivity, title: "Withdrawn", body: WITHDRAW_REASONS[Math.floor(hash01("wr", a.id) * WITHDRAW_REASONS.length)], kind: "withdrawn" });
   for (const n of notes) items.push({ at: new Date(n.at), title: `Note by ${n.by}`, body: n.text, kind: "note" });

@@ -1,21 +1,21 @@
-// Formatting helpers tuned for Indian schools: lakh/crore grouping, IST dates.
+// Formatting helpers: amounts in US dollars, short dates.
 
-const inr = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 });
-const num = new Intl.NumberFormat("en-IN");
+const usd = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
+const num = new Intl.NumberFormat("en-US");
 
-/** ₹1,23,456 */
-export function rupees(n: number): string {
-  return `₹${inr.format(Math.round(n))}`;
+/** $123,456 */
+export function dollars(n: number): string {
+  return `$${usd.format(Math.round(n))}`;
 }
 
-/** ₹4.2 Cr · ₹38.6 L · ₹92.5K · ₹640 */
-export function rupeesCompact(n: number, digits = 1): string {
+/** $4.25M · $386K · $92.5K · $640 */
+export function dollarsCompact(n: number, digits = 1): string {
   const abs = Math.abs(n);
   const sign = n < 0 ? "−" : "";
-  if (abs >= 1e7) return `${sign}₹${trim((abs / 1e7).toFixed(digits + 1))} Cr`;
-  if (abs >= 1e5) return `${sign}₹${trim((abs / 1e5).toFixed(digits))} L`;
-  if (abs >= 1e3) return `${sign}₹${trim((abs / 1e3).toFixed(digits))}K`;
-  return `${sign}₹${Math.round(abs)}`;
+  if (abs >= 1e9) return `${sign}$${trim((abs / 1e9).toFixed(digits + 1))}B`;
+  if (abs >= 1e6) return `${sign}$${trim((abs / 1e6).toFixed(digits + 1))}M`;
+  if (abs >= 1e3) return `${sign}$${trim((abs / 1e3).toFixed(digits))}K`;
+  return `${sign}$${Math.round(abs)}`;
 }
 
 function trim(s: string) {

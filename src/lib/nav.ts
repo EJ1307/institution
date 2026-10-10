@@ -1,6 +1,6 @@
 import {
   BarChart3, Bell, BookOpenCheck, Bus, CalendarDays, CalendarRange, ClipboardCheck, GraduationCap,
-  Home, IndianRupee, LayoutDashboard, NotebookPen, Settings, UserPlus, Users, UsersRound, type LucideIcon,
+  Home, DollarSign, LayoutDashboard, NotebookPen, Settings, UserPlus, Users, UsersRound, type LucideIcon,
 } from "lucide-react";
 import type { Role } from "./store";
 
@@ -29,7 +29,7 @@ export const NAV: Record<Role, NavGroup[]> = {
     {
       label: "Operations",
       items: [
-        { href: "/fees", label: "Fees", icon: IndianRupee },
+        { href: "/fees", label: "Fees", icon: DollarSign },
         { href: "/transport", label: "Transport", icon: Bus },
         { href: "/notices", label: "Notices", icon: Bell },
         { href: "/calendar", label: "Calendar", icon: CalendarDays },
@@ -64,7 +64,7 @@ export const NAV: Record<Role, NavGroup[]> = {
         { href: "/attendance", label: "Attendance", icon: ClipboardCheck },
         { href: "/academics", label: "Report card", icon: BookOpenCheck },
         { href: "/homework", label: "Homework", icon: NotebookPen },
-        { href: "/fees", label: "Fees & payments", icon: IndianRupee },
+        { href: "/fees", label: "Fees & payments", icon: DollarSign },
         { href: "/transport", label: "School bus", icon: Bus },
       ],
     },
@@ -84,7 +84,7 @@ export const SETTINGS_ITEM: NavItem = { href: "/settings", label: "Settings", ic
 export const PARENT_TABS: NavItem[] = [
   { href: "/dashboard", label: "Home", icon: Home },
   { href: "/attendance", label: "Attendance", icon: ClipboardCheck },
-  { href: "/fees", label: "Fees", icon: IndianRupee },
+  { href: "/fees", label: "Fees", icon: DollarSign },
   { href: "/transport", label: "Bus", icon: Bus },
   { href: "/notices", label: "Notices", icon: Bell },
 ];

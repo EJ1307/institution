@@ -8,7 +8,7 @@ import { Badge, Button, Card, CardHeader, cn } from "@/components/ui/primitives"
 import { academicYear, addDays, today } from "@/lib/data/calendar";
 import { feeAccount, LATE_FEE, type Instalment } from "@/lib/data/fees";
 import { classLabelLong } from "@/lib/data/school";
-import { fmtDate, fmtDay, fmtWeekday, plural, rupees } from "@/lib/format";
+import { fmtDate, fmtDay, fmtWeekday, plural, dollars } from "@/lib/format";
 import { useChild } from "@/lib/session";
 import { useAppState } from "@/lib/store";
 import { PaySheet } from "./PaySheet";
@@ -54,7 +54,7 @@ export function ParentFees() {
           <Card>
             <CardHeader
               title={`${ay.label} at a glance`}
-              description={`${rupees(acc.paid)} paid of ${rupees(yearTotal)} · ${plural(paidList.length, "instalment")} of 4`}
+              description={`${dollars(acc.paid)} paid of ${dollars(yearTotal)} · ${plural(paidList.length, "instalment")} of 4`}
             />
             <div className="px-5 pb-2">
               <div className="flex gap-1" aria-hidden>
@@ -96,7 +96,7 @@ export function ParentFees() {
                           {i.receipt} · {fmtDay(i.paidOn!)}
                         </span>
                       </span>
-                      <span className="tnum shrink-0 text-[13px] font-semibold">{rupees(i.amount)}</span>
+                      <span className="tnum shrink-0 text-[13px] font-semibold">{dollars(i.amount)}</span>
                     </button>
                   </li>
                 ))}
@@ -113,10 +113,10 @@ export function ParentFees() {
                     <span className="font-medium text-ink">
                       {child.concession.label} concession · {child.concession.pct}% of tuition
                     </span>
-                    {child.concession.label === "Sibling" && sibling ? ` — because ${sibling.firstName} also studies at Amaltas.` : "."}
+                    {child.concession.label === "Sibling" && sibling ? ` — because ${sibling.firstName} also studies at Laburnum.` : "."}
                   </p>
                   <p className="mt-2 text-muted">
-                    That's {rupees(acc.instalments[0].concession)} off every quarter, {rupees(acc.instalments[0].concession * 4)} this year. It's applied to each invoice automatically.
+                    That's {dollars(acc.instalments[0].concession)} off every quarter, {dollars(acc.instalments[0].concession * 4)} this year. It's applied to each invoice automatically.
                   </p>
                 </>
               ) : (
@@ -140,8 +140,8 @@ export function ParentFees() {
               <a href="tel:+911244567890" className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line-strong/80 bg-surface px-2.5 text-[12.5px] font-medium hover:bg-surface-2">
                 <Phone className="size-3.5" /> 0124 456 7890
               </a>
-              <a href="mailto:accounts@amaltas.edu.in" className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line-strong/80 bg-surface px-2.5 text-[12.5px] font-medium hover:bg-surface-2">
-                <Mail className="size-3.5" /> accounts@amaltas.edu.in
+              <a href="mailto:accounts@laburnumacademy.org" className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-line-strong/80 bg-surface px-2.5 text-[12.5px] font-medium hover:bg-surface-2">
+                <Mail className="size-3.5" /> accounts@laburnumacademy.org
               </a>
             </div>
           </Card>
@@ -187,34 +187,34 @@ function NextPayment({
               </Badge>
             )}
           </div>
-          <p className="tnum mt-4 text-[40px] leading-none font-semibold tracking-[-0.03em] text-ink">{rupees(ins.amount)}</p>
+          <p className="tnum mt-4 text-[40px] leading-none font-semibold tracking-[-0.03em] text-ink">{dollars(ins.amount)}</p>
           <p className="mt-2 text-[13.5px] text-ink-2">
             {ins.label} · {ins.covers} · due <span className="font-medium text-ink">{fmtWeekday(ins.due)}</span>
           </p>
           <p className="mt-0.5 text-[12.5px] text-muted">Tuition{ins.transport ? " and school bus" : ""} for {childName}, {ins.covers.replace("–", " to ")}</p>
           <div className="mt-6 md:mt-auto md:pt-6">
             <Button variant="primary" size="lg" className="w-full sm:w-auto sm:min-w-[220px]" onClick={onPay}>
-              Pay {rupees(ins.amount)} <ArrowRight />
+              Pay {dollars(ins.amount)} <ArrowRight />
             </Button>
             <p className="mt-2.5 flex items-center gap-1.5 text-[12px] text-muted">
               <CalendarClock className="size-3.5 shrink-0" />
               {overdue
                 ? ins.lateFee
-                  ? `Includes the ${rupees(LATE_FEE)} late fee, added after ${GRACE_DAYS} days.`
-                  : `Pay by ${fmtDay(payBy)} to avoid the ${rupees(LATE_FEE)} late fee.`
-                : `Pay by ${fmtDay(payBy)} to avoid the ${rupees(LATE_FEE)} late fee.`}
+                  ? `Includes the ${dollars(LATE_FEE)} late fee, added after ${GRACE_DAYS} days.`
+                  : `Pay by ${fmtDay(payBy)} to avoid the ${dollars(LATE_FEE)} late fee.`
+                : `Pay by ${fmtDay(payBy)} to avoid the ${dollars(LATE_FEE)} late fee.`}
             </p>
           </div>
         </div>
         <dl className="border-t border-line bg-surface-2 px-5 py-4 text-[13px] sm:px-6 md:border-t-0 md:border-l md:py-6">
           <p className="mb-2 text-[12px] font-medium text-muted">What it covers</p>
-          <Line k="Tuition fee" v={rupees(ins.tuition)} />
-          {ins.transport > 0 && <Line k={`School bus${routeId ? ` · Route ${routeId}` : ""}`} v={rupees(ins.transport)} />}
-          {ins.concession > 0 && <Line k={concessionLabel ?? "Concession"} v={`−${rupees(ins.concession)}`} tone="good" />}
-          <Line k="Late fee" v={ins.lateFee ? rupees(ins.lateFee) : "—"} muted={!ins.lateFee} />
+          <Line k="Tuition fee" v={dollars(ins.tuition)} />
+          {ins.transport > 0 && <Line k={`School bus${routeId ? ` · Route ${routeId}` : ""}`} v={dollars(ins.transport)} />}
+          {ins.concession > 0 && <Line k={concessionLabel ?? "Concession"} v={`−${dollars(ins.concession)}`} tone="good" />}
+          <Line k="Late fee" v={ins.lateFee ? dollars(ins.lateFee) : "—"} muted={!ins.lateFee} />
           <div className="mt-2 flex items-baseline justify-between border-t border-line-strong/70 pt-3">
             <dt className="font-semibold text-ink">Total</dt>
-            <dd className="tnum font-semibold text-ink">{rupees(ins.amount)}</dd>
+            <dd className="tnum font-semibold text-ink">{dollars(ins.amount)}</dd>
           </div>
         </dl>
       </div>
@@ -242,7 +242,7 @@ function AllClear({ upcoming, childName, lastPaid, onReceipt }: { upcoming: Inst
           <p className="text-[17px] font-semibold text-ink">{childName}'s fees are paid up</p>
           {upcoming ? (
             <p className="mt-1 text-[13.5px] text-ink-2">
-              Next is {upcoming.label} ({upcoming.covers}) — <span className="tnum font-medium text-ink">{rupees(upcoming.amount)}</span>, due {fmtDate(upcoming.due)}. We'll send the invoice on {fmtDay(invoiceDate(upcoming.due))} and remind you a week before it's due.
+              Next is {upcoming.label} ({upcoming.covers}) — <span className="tnum font-medium text-ink">{dollars(upcoming.amount)}</span>, due {fmtDate(upcoming.due)}. We'll send the invoice on {fmtDay(invoiceDate(upcoming.due))} and remind you a week before it's due.
             </p>
           ) : (
             <p className="mt-1 text-[13.5px] text-ink-2">All four instalments for this year are paid. Thank you.</p>
@@ -283,7 +283,7 @@ function TimelineRow({ ins, last, onPay, onReceipt }: { ins: Instalment; last: b
           </p>
         </div>
         <div className="flex items-center gap-2.5">
-          <span className={cn("tnum text-[13.5px] font-semibold", ins.status === "upcoming" ? "text-muted" : "text-ink")}>{rupees(ins.amount)}</span>
+          <span className={cn("tnum text-[13.5px] font-semibold", ins.status === "upcoming" ? "text-muted" : "text-ink")}>{dollars(ins.amount)}</span>
           {ins.status === "paid" ? (
             <Button size="sm" variant="ghost" onClick={onReceipt} aria-label={`Receipt for ${ins.label}`}>
               Receipt

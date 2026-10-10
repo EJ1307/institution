@@ -11,7 +11,7 @@ export const PAYMENT_MODES = ["UPI", "Net banking", "Card", "Cheque", "Cash"] as
 export type PaymentMode = (typeof PAYMENT_MODES)[number];
 const MODE_WEIGHTS = [0.44, 0.21, 0.15, 0.12, 0.08];
 
-export const LATE_FEE = 500;
+export const LATE_FEE = 50;
 const WINDOW_DAYS = 25; // invoices go out this many days before the due date
 
 export type InstalmentStatus = "paid" | "due" | "overdue" | "upcoming";
@@ -109,7 +109,7 @@ export function feeAccount(s: Student): FeeAccount {
       status,
       paidOn,
       mode: paidOn ? ((demoPaid?.mode as PaymentMode) ?? pickMode(`${s.id}${ins.id}`)) : null,
-      receipt: paidOn ? (demoPaid?.receipt ?? `AIS/${ay.label.replace("–", "-")}/${String(idx + 1)}${(s.id.replace(/\D/g, "") || s.admissionNo.slice(-4)).padStart(4, "0")}`) : null,
+      receipt: paidOn ? (demoPaid?.receipt ?? `LA/${ay.label.replace("–", "-")}/${String(idx + 1)}${(s.id.replace(/\D/g, "") || s.admissionNo.slice(-4)).padStart(4, "0")}`) : null,
     };
   });
 

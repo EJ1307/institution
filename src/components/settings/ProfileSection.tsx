@@ -18,8 +18,8 @@ export const PROFILE_DEFAULTS: Record<string, string> = {
   schoolCode: "",
   udise: "",
   phone: "+91 124 4938 200",
-  email: "office@amaltas.edu.in",
-  website: "amaltas.edu.in",
+  email: "office@laburnumacademy.org",
+  website: "laburnumacademy.org",
   yearStart: "April",
   medium: "English",
 };
@@ -47,7 +47,7 @@ export function ProfileSection() {
   const save = () => {
     const e: Form = {};
     if (f.school.trim().length < 4) e.school = "Enter the school's registered name.";
-    if (!/^[A-Za-z]{2,6}$/.test(f.short.trim())) e.short = "2–6 letters, e.g. AIS.";
+    if (!/^[A-Za-z]{2,6}$/.test(f.short.trim())) e.short = "2–6 letters, e.g. LA.";
     if (!f.location.trim()) e.location = "Shown under the school name — e.g. Sector 57, Gurugram.";
     if (!/^\d{6}$/.test(f.pin)) e.pin = "PIN codes have 6 digits.";
     if (f.affiliation && !/^\d{5,7}$/.test(f.affiliation)) e.affiliation = "Check the affiliation number on your CBSE letter.";

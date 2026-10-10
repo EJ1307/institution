@@ -1,6 +1,6 @@
 "use client";
 
-import { BellRing, CheckCircle2, IndianRupee, MoreHorizontal, Phone, Send } from "lucide-react";
+import { BellRing, CheckCircle2, DollarSign, MoreHorizontal, Phone, Send } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Checkbox, Field, SearchInput, Select, Textarea } from "@/components/ui/forms";
 import { Dialog, Menu, MenuItem, MenuSeparator, useToast } from "@/components/ui/overlay";
@@ -11,7 +11,7 @@ import { addDays, today } from "@/lib/data/calendar";
 import type { FeeAccount } from "@/lib/data/fees";
 import type { Student } from "@/lib/data/people";
 import { GRADES, classLabel, type GradeId } from "@/lib/data/school";
-import { fmtDay, number, plural, rupees, rupeesCompact } from "@/lib/format";
+import { fmtDay, number, plural, dollars, dollarsCompact } from "@/lib/format";
 import { setState, useAppState } from "@/lib/store";
 import { ago, useNow } from "./lib";
 
@@ -132,7 +132,7 @@ export function Overdue({
     <Card>
       <CardHeader
         title={`${plural(all.length, "family", "families")} past the due date`}
-        description={`${rupees(all.reduce((a, r) => a + r.overdue, 0))} overdue. Automatic SMS reminders go out 1, 7, 15 and 30 days after each due date${remindedToday > 0 ? ` · you've reminded ${plural(remindedToday, "family", "families")} today` : ""}.`}
+        description={`${dollars(all.reduce((a, r) => a + r.overdue, 0))} overdue. Automatic SMS reminders go out 1, 7, 15 and 30 days after each due date${remindedToday > 0 ? ` · you've reminded ${plural(remindedToday, "family", "families")} today` : ""}.`}
       />
       <div className="flex flex-col gap-3 px-5 pb-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -169,7 +169,7 @@ export function Overdue({
         <div className="animate-fade-in flex flex-wrap items-center justify-between gap-3 border-t border-line bg-brand-soft/50 px-5 py-2.5">
           <p className="text-[13px] text-ink">
             <span className="font-semibold">{plural(selected.size, "family", "families")}</span> selected
-            <span className="text-muted"> · {rupees(selTotal)} overdue</span>
+            <span className="text-muted"> · {dollars(selTotal)} overdue</span>
           </p>
           <div className="flex items-center gap-2">
             {selected.size < rows.length && (
@@ -244,7 +244,7 @@ export function Overdue({
                     </Td>
                     <Td className="whitespace-nowrap text-ink-2">{classLabel(r.s.grade, r.s.section)}</Td>
                     <Td align="right">
-                      <p className="font-semibold text-ink">{rupees(r.overdue)}</p>
+                      <p className="font-semibold text-ink">{dollars(r.overdue)}</p>
                       <p className="text-[11.5px] font-normal text-muted">{r.quarters.join(" + ")}{r.acc.instalments.some((i) => i.status === "overdue" && i.lateFee) ? " · incl. late fee" : ""}</p>
                     </Td>
                     <Td align="right">
@@ -277,7 +277,7 @@ export function Overdue({
                             <MenuItem icon={<BellRing />} onClick={() => { close(); setComposeFor([r]); }}>
                               Send reminder
                             </MenuItem>
-                            <MenuItem icon={<IndianRupee />} onClick={() => { close(); onRecord(r.s); }}>
+                            <MenuItem icon={<DollarSign />} onClick={() => { close(); onRecord(r.s); }}>
                               Record payment
                             </MenuItem>
                             <MenuSeparator />
@@ -319,13 +319,13 @@ const CHANNELS = ["SMS", "WhatsApp", "Email"] as const;
 type Channel = (typeof CHANNELS)[number];
 
 const TEMPLATE =
-  "Dear {parent}, {student}'s fee of {amount} for {quarters} was due on {due}. Please pay in the Kaksha app or at the accounts office (8 am – 2:30 pm) to avoid a further late fee. — Accounts, Amaltas International School";
+  "Dear {parent}, {student}'s fee of {amount} for {quarters} was due on {due}. Please pay in the Campus app or at the accounts office (8 am – 2:30 pm) to avoid a further late fee. — Accounts, Laburnum Academy";
 
 function fill(tpl: string, r: Row) {
   return tpl
     .replaceAll("{parent}", r.parent)
     .replaceAll("{student}", r.s.firstName)
-    .replaceAll("{amount}", rupees(r.overdue))
+    .replaceAll("{amount}", dollars(r.overdue))
     .replaceAll("{quarters}", r.quarters.join(" & "))
     .replaceAll("{due}", fmtDay(r.oldestDue));
 }
@@ -353,7 +353,7 @@ function ReminderDialog({ rows, onClose, onSent }: { rows: Row[] | null; onClose
       open={open}
       onClose={onClose}
       title={rows && rows.length === 1 ? `Remind ${rows[0].parent}` : `Remind ${rows ? plural(rows.length, "family", "families") : ""}`}
-      description={rows ? `${rupees(total)} overdue${rows.length > 1 ? ` · ${rupeesCompact(total)} across the selection` : ` for ${rows[0].s.name}`}` : undefined}
+      description={rows ? `${dollars(total)} overdue${rows.length > 1 ? ` · ${dollarsCompact(total)} across the selection` : ` for ${rows[0].s.name}`}` : undefined}
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>

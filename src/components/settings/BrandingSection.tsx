@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ClipboardCheck, IndianRupee, LayoutDashboard, RotateCcw, Upload, UsersRound } from "lucide-react";
+import { Check, ClipboardCheck, DollarSign, LayoutDashboard, RotateCcw, Upload, UsersRound } from "lucide-react";
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import { Crest } from "@/components/shell/Crest";
 import { Field, Input } from "@/components/ui/forms";
@@ -47,7 +47,7 @@ export function BrandingSection() {
   const reset = () => {
     saveBrand(DEFAULT_BRAND);
     setErrors({});
-    toast({ title: "Branding reset", body: "Back to the school's original name, motto and Amaltas green.", tone: "info" });
+    toast({ title: "Branding reset", body: "Back to the school's original name, motto and Laburnum green.", tone: "info" });
   };
 
   return (
@@ -197,7 +197,7 @@ function PortalPreview({ brand, preset }: { brand: BrandConfig; preset: BrandPre
     { icon: LayoutDashboard, label: "Dashboard", active: true },
     { icon: UsersRound, label: "Students" },
     { icon: ClipboardCheck, label: "Attendance" },
-    { icon: IndianRupee, label: "Fees" },
+    { icon: DollarSign, label: "Fees" },
   ];
   return (
     <div style={vars} className="overflow-hidden rounded-xl border border-line" aria-label="Portal preview" role="img">
@@ -206,8 +206,8 @@ function PortalPreview({ brand, preset }: { brand: BrandConfig; preset: BrandPre
           <div className="mb-3 flex items-center gap-2 px-1">
             <Crest size={22} />
             <div className="min-w-0">
-              <div className="title-serif truncate text-[11px] leading-tight font-semibold">{brand.school.replace(/ International School$/, "")}</div>
-              <div className="truncate text-[8.5px] text-white/50">{brand.school.endsWith("International School") ? "International School" : brand.city}</div>
+              <div className="title-serif truncate text-[11px] leading-tight font-semibold">{brand.school.replace(/ (International School|Academy)$/, "")}</div>
+              <div className="truncate text-[8.5px] text-white/50">{brand.school.match(/ (International School|Academy)$/)?.[1] ?? brand.city}</div>
             </div>
           </div>
           {nav.map((n) => (
@@ -234,7 +234,7 @@ function PortalPreview({ brand, preset }: { brand: BrandConfig; preset: BrandPre
             </div>
             <div className="rounded-lg border border-line bg-surface p-2">
               <div className="text-[8.5px] text-muted">Fees collected</div>
-              <div className="text-[15px] font-semibold text-ink">₹18.5 Cr</div>
+              <div className="text-[15px] font-semibold text-ink">$18.5M</div>
               <div className="mt-1 inline-flex rounded-full bg-brand-soft px-1.5 text-[8px] font-medium text-brand">85% of billed</div>
             </div>
           </div>
@@ -259,10 +259,8 @@ function LoginPreview({ brand, preset }: { brand: BrandConfig; preset: BrandPres
             <span className="title-serif truncate text-[10.5px] font-semibold">{brand.school}</span>
           </div>
           <div className="mt-auto">
-            <p lang="sa" className="truncate text-[17px] leading-none text-accent" style={{ fontFamily: "'Tiro Devanagari Hindi', serif" }}>
-              {brand.motto}
-            </p>
-            <p className="mt-1 truncate text-[8.5px] text-white/55 italic">“{brand.mottoTranslation}”</p>
+            <p className="title-serif truncate text-[15px] leading-tight text-accent italic">{brand.motto}</p>
+            {brand.mottoTranslation && <p className="mt-1 truncate text-[8.5px] text-white/55 italic">“{brand.mottoTranslation}”</p>}
             <p className="title-serif mt-3 text-[12px] leading-tight text-white">
               Everything about school, <span className="text-white/55">in one quiet place.</span>
             </p>
@@ -270,7 +268,7 @@ function LoginPreview({ brand, preset }: { brand: BrandConfig; preset: BrandPres
         </div>
         <div className="flex flex-1 flex-col justify-center bg-paper px-5">
           <div className="title-serif text-[14px] font-semibold text-ink">Sign in</div>
-          <div className="text-[9px] text-muted">to the {brand.short} portal</div>
+          <div className="text-[9px] text-muted">to the {brand.school} portal</div>
           <div className="mt-2.5 h-6 rounded-md border border-line-strong bg-surface" />
           <div className="mt-1.5 h-6 rounded-md border border-line-strong bg-surface" />
           <div className="mt-2.5 flex h-6 items-center justify-center rounded-md bg-brand text-[9.5px] font-medium text-white">Continue</div>

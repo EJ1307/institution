@@ -81,7 +81,7 @@ export function SecuritySection() {
   };
 
   const facts = [
-    { icon: Globe2, title: "Stored in India", body: "All data, backups included, stays in data centres in two Indian regions. Nothing is processed abroad." },
+    { icon: Globe2, title: "Stored in two regions", body: "All data, backups included, is kept in two separate data-centre regions, so one outage never takes the portal down." },
     { icon: LockKeyhole, title: "Encrypted everywhere", body: "AES-256 at rest and TLS 1.3 in transit. Documents are watermarked when viewed." },
     { icon: Archive, title: "Backed up daily", body: `Last backup today at 2:04 am · 35 daily restore points · tested monthly.` },
     { icon: ShieldCheck, title: "DPDP Act, 2023", body: `Verifiable parental consent on record for ${number(families)} families. Deletion requests closed within 30 days.` },

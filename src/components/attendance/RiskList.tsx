@@ -257,7 +257,7 @@ export function RiskList() {
           <p className="mb-1 text-[11px] font-semibold tracking-[0.06em] text-faint uppercase">Message preview</p>
           Dear Parent, {pendingNotify[0]?.s.firstName ?? "your child"}&rsquo;s attendance this term is{" "}
           {pendingNotify[0] ? percent(pendingNotify[0].sum.rate) : "below 85%"}. CBSE requires 75% to appear in board examinations. Please meet the class teacher
-          this week — book a slot in the app. — Amaltas International School
+          this week — book a slot in the app. — Laburnum Academy
         </div>
         <p className="mt-3 text-[12.5px] text-muted">
           {pendingNotify.length} of {filtered.length} families in this view haven&rsquo;t been contacted yet

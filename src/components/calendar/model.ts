@@ -43,7 +43,7 @@ const NOTES: Record<string, string> = {
   E5: "Performances by Classes I and II, followed by tea in the junior wing courtyard. Two grandparents per child, please.",
   E6: "Class teachers will share the CBSE list: check the spelling of names, parents' names and dates of birth. Corrections are not accepted after this date.",
   E7: "Workshop on competency-based questions, led by the CBSE resource person for Gurugram. Please bring your draft question banks.",
-  E8: "Amaltas MUN: 14 schools, 6 committees. Delegates report to the auditorium at 8:00 am both days.",
+  E8: "Laburnum MUN: 14 schools, 6 committees. Delegates report to the auditorium at 8:00 am both days.",
   E9: "Heats for 100 m, 200 m, 4 × 100 m relay and long jump. Finals are held on Annual Sports Day.",
 };
 
@@ -178,9 +178,9 @@ export function toIcs(i: CalItem, school: string) {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Kaksha//School calendar//EN",
+    "PRODID:-//Campus//School calendar//EN",
     "BEGIN:VEVENT",
-    `UID:${i.id}@kaksha`,
+    `UID:${i.id}@campus`,
     `DTSTAMP:${icsDate(new Date())}T000000Z`,
     timed ? `DTSTART;TZID=Asia/Kolkata:${timed}` : `DTSTART;VALUE=DATE:${icsDate(i.start)}`,
     timed ? `DURATION:PT2H` : `DTEND;VALUE=DATE:${icsDate(addDays(i.end, 1))}`,

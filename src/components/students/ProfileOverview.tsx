@@ -12,7 +12,7 @@ import { feeAccount } from "@/lib/data/fees";
 import { classTeacher, type Student } from "@/lib/data/people";
 import { classLabel, hasMarks } from "@/lib/data/school";
 import { ROUTE_BY_ID } from "@/lib/data/transport";
-import { fmtDate, fmtDay, number, percent, rupees } from "@/lib/format";
+import { fmtDate, fmtDay, number, percent, dollars } from "@/lib/format";
 import { useAppState } from "@/lib/store";
 import { CalendarLegend, MonthCalendar } from "./MonthCalendar";
 import { classRate, medicalFor } from "./profileData";
@@ -229,7 +229,7 @@ function FeeCard({ student: s, onTab }: { student: Student; onTab?: (t: ProfileT
     <Card>
       <CardHeader
         title="Fees"
-        description={`Annual ${rupees(acc.annual)}${s.concession ? ` after ${s.concession.pct}% ${s.concession.label.toLowerCase()} concession` : ""}`}
+        description={`Annual ${dollars(acc.annual)}${s.concession ? ` after ${s.concession.pct}% ${s.concession.label.toLowerCase()} concession` : ""}`}
         action={
           onTab ? (
             <Button variant="ghost" size="sm" onClick={() => onTab("fees")}>
@@ -242,12 +242,12 @@ function FeeCard({ student: s, onTab }: { student: Student; onTab?: (t: ProfileT
         <div className="flex items-end justify-between gap-3">
           <div>
             <div className="text-[12px] text-muted">{acc.outstanding > 0 && acc.overdue === 0 ? "Due now" : "Outstanding"}</div>
-            <div className={cn("tnum text-[24px] leading-tight font-semibold", acc.overdue > 0 ? "text-bad" : "text-ink")}>{rupees(acc.outstanding)}</div>
-            {acc.overdue > 0 && <div className="tnum text-[12px] text-bad">{rupees(acc.overdue)} overdue</div>}
+            <div className={cn("tnum text-[24px] leading-tight font-semibold", acc.overdue > 0 ? "text-bad" : "text-ink")}>{dollars(acc.outstanding)}</div>
+            {acc.overdue > 0 && <div className="tnum text-[12px] text-bad">{dollars(acc.overdue)} overdue</div>}
           </div>
           <div className="text-right text-[12px] text-muted">
             <div>Paid this year</div>
-            <div className="tnum text-[14px] font-semibold text-ink">{rupees(acc.paid)}</div>
+            <div className="tnum text-[14px] font-semibold text-ink">{dollars(acc.paid)}</div>
           </div>
         </div>
         <ol className="mt-4 grid grid-cols-4 gap-1.5">
@@ -261,8 +261,8 @@ function FeeCard({ student: s, onTab }: { student: Student; onTab?: (t: ProfileT
         <p className="mt-3 text-[12.5px] text-muted">
           {acc.nextDue
             ? acc.nextDue.status === "overdue"
-              ? `${acc.nextDue.label} was due on ${fmtDay(acc.nextDue.due)}${acc.nextDue.lateFee ? `, including a ${rupees(acc.nextDue.lateFee)} late fee` : ""}.`
-              : `${acc.nextDue.label} (${acc.nextDue.covers}) of ${rupees(acc.nextDue.amount)} is due on ${fmtDay(acc.nextDue.due)}.`
+              ? `${acc.nextDue.label} was due on ${fmtDay(acc.nextDue.due)}${acc.nextDue.lateFee ? `, including a ${dollars(acc.nextDue.lateFee)} late fee` : ""}.`
+              : `${acc.nextDue.label} (${acc.nextDue.covers}) of ${dollars(acc.nextDue.amount)} is due on ${fmtDay(acc.nextDue.due)}.`
             : "Nothing due right now. The next invoice goes out 25 days before its due date."}
         </p>
       </CardBody>

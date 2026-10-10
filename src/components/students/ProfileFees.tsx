@@ -10,7 +10,7 @@ import { academicYear, isoDate } from "@/lib/data/calendar";
 import { feeAccount, LATE_FEE, type Instalment } from "@/lib/data/fees";
 import type { Student } from "@/lib/data/people";
 import { classLabel } from "@/lib/data/school";
-import { fmtDate, fmtDay, rupees } from "@/lib/format";
+import { fmtDate, fmtDay, dollars } from "@/lib/format";
 import { useBrand } from "@/lib/session";
 import { setState, useAppState } from "@/lib/store";
 import { SummaryCell, SummaryStrip } from "./shared";
@@ -36,26 +36,26 @@ export function ProfileFees({ student: s }: { student: Student }) {
 
   const remind = () => {
     setState((st) => ({ reminders: { ...st.reminders, [s.id]: new Date().toISOString() } }));
-    toast({ title: "Fee reminder sent", body: `${s.guardians[0].name} will get an SMS and an app notification with a payment link for ${rupees(acc.outstanding)}.` });
+    toast({ title: "Fee reminder sent", body: `${s.guardians[0].name} will get an SMS and an app notification with a payment link for ${dollars(acc.outstanding)}.` });
   };
 
   return (
     <div className="flex flex-col gap-4">
       <SummaryStrip className="grid-cols-2 lg:grid-cols-4">
-        <SummaryCell label={`Annual fee · ${ay.label}`} value={rupees(acc.annual)} sub={`${classLabel(s.grade, s.section)} tuition${s.routeId ? " + bus" : ""}, 4 instalments`} />
-        <SummaryCell label="Paid so far" value={rupees(acc.paid)} sub={`${acc.instalments.filter((i) => i.status === "paid").length} of 4 instalments`} />
+        <SummaryCell label={`Annual fee · ${ay.label}`} value={dollars(acc.annual)} sub={`${classLabel(s.grade, s.section)} tuition${s.routeId ? " + bus" : ""}, 4 instalments`} />
+        <SummaryCell label="Paid so far" value={dollars(acc.paid)} sub={`${acc.instalments.filter((i) => i.status === "paid").length} of 4 instalments`} />
         <SummaryCell
           label="Outstanding"
-          value={<span className={acc.overdue ? "text-bad" : undefined}>{rupees(acc.outstanding)}</span>}
-          sub={acc.overdue ? `${rupees(acc.overdue)} past its due date` : acc.outstanding ? `due ${fmtDay(acc.nextDue!.due)}` : "nothing due"}
+          value={<span className={acc.overdue ? "text-bad" : undefined}>{dollars(acc.outstanding)}</span>}
+          sub={acc.overdue ? `${dollars(acc.overdue)} past its due date` : acc.outstanding ? `due ${fmtDay(acc.nextDue!.due)}` : "nothing due"}
         />
-        <SummaryCell label="Concession" value={s.concession ? `${s.concession.pct}%` : "None"} sub={s.concession ? `${s.concession.label} · ${rupees(concessionYear)} a year` : "Full fee applies"} />
+        <SummaryCell label="Concession" value={s.concession ? `${s.concession.pct}%` : "None"} sub={s.concession ? `${s.concession.label} · ${dollars(concessionYear)} a year` : "Full fee applies"} />
       </SummaryStrip>
 
       <Card>
         <CardHeader
           title="Instalment ledger"
-          description={`Quarterly invoices go out 25 days before the due date · ${rupees(LATE_FEE)} late fee after 15 days`}
+          description={`Quarterly invoices go out 25 days before the due date · ${dollars(LATE_FEE)} late fee after 15 days`}
           action={
             acc.outstanding > 0 ? (
               <Button size="sm" variant={remindedToday ? "ghost" : "secondary"} onClick={remind} disabled={!!remindedToday}>
@@ -98,19 +98,19 @@ export function ProfileFees({ student: s }: { student: Student }) {
                 </Td>
                 <Td className="tnum whitespace-nowrap text-ink-2">{fmtDay(i.due)}</Td>
                 <Td align="right" className="hidden lg:table-cell">
-                  {rupees(i.tuition)}
+                  {dollars(i.tuition)}
                 </Td>
                 <Td align="right" className="hidden text-ink-2 lg:table-cell">
-                  {i.transport ? rupees(i.transport) : "—"}
+                  {i.transport ? dollars(i.transport) : "—"}
                 </Td>
                 <Td align="right" className="hidden text-ink-2 lg:table-cell">
-                  {i.concession ? `−${rupees(i.concession)}` : "—"}
+                  {i.concession ? `−${dollars(i.concession)}` : "—"}
                 </Td>
                 <Td align="right" className={cn("hidden md:table-cell", i.lateFee ? "text-bad" : "text-ink-2")}>
-                  {i.lateFee ? rupees(i.lateFee) : "—"}
+                  {i.lateFee ? dollars(i.lateFee) : "—"}
                 </Td>
                 <Td align="right" className="font-semibold text-ink">
-                  {rupees(i.amount)}
+                  {dollars(i.amount)}
                 </Td>
                 <Td>
                   <Badge tone={STATUS[i.status].tone}>{STATUS[i.status].label}</Badge>
@@ -142,9 +142,9 @@ export function ProfileFees({ student: s }: { student: Student }) {
               </td>
               <td className="hidden lg:table-cell" colSpan={3} />
               <td className="hidden md:table-cell" />
-              <td className="tnum px-3 text-right font-semibold text-ink">{rupees(acc.instalments.reduce((a, i) => a + i.amount, 0))}</td>
+              <td className="tnum px-3 text-right font-semibold text-ink">{dollars(acc.instalments.reduce((a, i) => a + i.amount, 0))}</td>
               <td colSpan={3} className="pr-5 text-[12px] text-muted">
-                {rupees(acc.paid)} received
+                {dollars(acc.paid)} received
               </td>
             </tr>
           </tfoot>
@@ -206,7 +206,7 @@ function ReceiptDialog({ student: s, ins, onClose }: { student: Student; ins: In
               <Crest size={36} />
               <div>
                 <div className="title-serif text-[14px] font-semibold">{brand.school}</div>
-                <div className="text-[11px] text-[#777B81]">{brand.city} · Affiliated to CBSE</div>
+                <div className="text-[11px] text-[#777B81]">{brand.city}</div>
               </div>
             </div>
             <div className="text-right">
@@ -239,12 +239,12 @@ function ReceiptDialog({ student: s, ins, onClose }: { student: Student; ins: In
               {lines.map((l) => (
                 <tr key={l.k} className="border-b border-[#EEECE6]">
                   <td className="py-2">{l.k}</td>
-                  <td className="tnum py-2 text-right">{l.v < 0 ? `−${rupees(-l.v)}` : rupees(l.v)}</td>
+                  <td className="tnum py-2 text-right">{l.v < 0 ? `−${dollars(-l.v)}` : dollars(l.v)}</td>
                 </tr>
               ))}
               <tr>
                 <td className="pt-3 font-semibold">Total paid</td>
-                <td className="tnum pt-3 text-right text-[15px] font-semibold">{rupees(ins.amount)}</td>
+                <td className="tnum pt-3 text-right text-[15px] font-semibold">{dollars(ins.amount)}</td>
               </tr>
             </tbody>
           </table>

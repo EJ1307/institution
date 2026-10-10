@@ -6,8 +6,8 @@ import { PERSONA_ADMIN_ID, PERSONA_PARENT, PERSONA_TEACHER_ID, studentById, staf
 import { setState, useAppState, type Role } from "./store";
 
 export const PERSONAS: Record<Role, { userId: string; name: string; title: string; login: string }> = {
-  admin: { userId: PERSONA_ADMIN_ID, name: "Dr. Meenakshi Rao", title: "Principal", login: "principal@amaltas.edu.in" },
-  teacher: { userId: PERSONA_TEACHER_ID, name: "Ms. Kavya Iyer", title: "TGT Mathematics · Class teacher, VIII-B", login: "kavya.iyer@amaltas.edu.in" },
+  admin: { userId: PERSONA_ADMIN_ID, name: "Dr. Meenakshi Rao", title: "Principal", login: "principal@laburnumacademy.org" },
+  teacher: { userId: PERSONA_TEACHER_ID, name: "Ms. Kavya Iyer", title: "TGT Mathematics · Class teacher, VIII-B", login: "kavya.iyer@laburnumacademy.org" },
   parent: { userId: PERSONA_PARENT.id, name: "Rohan Mehta", title: "Parent of Aanya (VII-A) & Vihaan (II-C)", login: "98100 24071" },
 };
 

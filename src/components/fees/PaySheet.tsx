@@ -9,7 +9,7 @@ import { Button, cn } from "@/components/ui/primitives";
 import type { Instalment, PaymentMode } from "@/lib/data/fees";
 import type { Student } from "@/lib/data/people";
 import { hashInt } from "@/lib/rng";
-import { fmtDay, fmtTime, rupees } from "@/lib/format";
+import { fmtDay, fmtTime, dollars } from "@/lib/format";
 import { PrintReceiptButton } from "./Receipt";
 import { makeReference, receiptFor, recordPayment, type ReceiptData } from "./lib";
 
@@ -26,7 +26,7 @@ const BANKS = [
 ];
 const OTHER_BANKS = ["Bank of Baroda", "Canara Bank", "Federal Bank", "IDFC FIRST Bank", "IndusInd Bank", "Union Bank of India", "Yes Bank"];
 
-const PAYEE_VPA = "amaltasschool@upi";
+const PAYEE_VPA = "laburnumacademy@upi";
 
 export function PaySheet({
   open,
@@ -132,7 +132,7 @@ export function PaySheet({
     onClose();
   };
 
-  const title = step === "done" ? "Payment successful" : step === "processing" ? "Processing payment" : `Pay ${rupees(amount)}`;
+  const title = step === "done" ? "Payment successful" : step === "processing" ? "Processing payment" : `Pay ${dollars(amount)}`;
   const description = ins ? `${ins.label} · ${ins.covers} · ${student.name}` : undefined;
 
   return (
@@ -151,7 +151,7 @@ export function PaySheet({
           ) : (
             <div className="flex w-full flex-col gap-2">
               <Button variant="primary" size="lg" className="w-full" onClick={pay} disabled={tried && !canPay}>
-                <Lock /> {method === "netbanking" ? `Continue to ${bank ?? "your bank"}` : method === "upi" ? `Send request · ${rupees(amount)}` : `Pay ${rupees(amount)}`}
+                <Lock /> {method === "netbanking" ? `Continue to ${bank ?? "your bank"}` : method === "upi" ? `Send request · ${dollars(amount)}` : `Pay ${dollars(amount)}`}
               </Button>
             </div>
           )
@@ -171,9 +171,9 @@ export function PaySheet({
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-[12px] text-muted">Paying</p>
-                <p className="truncate text-[13.5px] font-medium">Amaltas International School</p>
+                <p className="truncate text-[13.5px] font-medium">Laburnum Academy</p>
               </div>
-              <p className="tnum shrink-0 text-[22px] font-semibold tracking-[-0.02em]">{rupees(amount)}</p>
+              <p className="tnum shrink-0 text-[22px] font-semibold tracking-[-0.02em]">{dollars(amount)}</p>
             </div>
             <p className="mt-2 flex items-center gap-1.5 border-t border-line pt-2 text-[11.5px] text-muted">
               <Lock className="size-3" aria-hidden /> Encrypted end to end. Card and bank details never reach the school.
@@ -206,7 +206,7 @@ export function PaySheet({
                   <StylisedQR seed={`${student.id}${ins.id}`} />
                   <p className="mt-3 text-[13px] font-medium">Scan with any UPI app</p>
                   <p className="tnum mt-0.5 text-[12px] text-muted">
-                    {PAYEE_VPA} · {rupees(amount)}
+                    {PAYEE_VPA} · {dollars(amount)}
                   </p>
                   <QrTimer />
                 </div>
@@ -470,7 +470,7 @@ function Processing({ method, upiMode, progress, amount, bank }: { method: Metho
         <span className="absolute inset-0 animate-spin rounded-full border-[3px] border-brand-soft border-t-brand" style={{ animationDuration: "1.1s" }} />
         <Lock className="size-5 text-brand" />
       </div>
-      <p className="tnum mt-5 text-[22px] font-semibold tracking-[-0.02em]">{rupees(amount)}</p>
+      <p className="tnum mt-5 text-[22px] font-semibold tracking-[-0.02em]">{dollars(amount)}</p>
       <p className="mt-1 text-[13px] text-muted">
         {method === "upi" && upiMode === "id" ? "Open your UPI app and approve the request" : "Please don't close this window or press back"}
       </p>
@@ -501,7 +501,7 @@ function Success({ receipt }: { receipt: ReceiptData }) {
           <Check className="size-6" strokeWidth={3} />
         </span>
       </span>
-      <p className="tnum mt-5 text-[28px] leading-none font-semibold tracking-[-0.02em]">{rupees(receipt.instalment.amount)}</p>
+      <p className="tnum mt-5 text-[28px] leading-none font-semibold tracking-[-0.02em]">{dollars(receipt.instalment.amount)}</p>
       <p className="mt-2 text-[13.5px] text-ink-2">
         {receipt.instalment.label} fees for {receipt.student.firstName} are paid
       </p>

@@ -5,7 +5,7 @@ import { ledger } from "@/lib/data/fees";
 import { latestExam, toppers, classResults } from "@/lib/data/exams";
 import { applications, funnel } from "@/lib/data/admissions";
 import { timetable, teacherTimetable } from "@/lib/data/timetable";
-import { rupeesCompact, percent } from "@/lib/format";
+import { dollarsCompact, percent } from "@/lib/format";
 
 const t0 = Date.now();
 const s = students();
@@ -20,9 +20,9 @@ console.log("grid low", grid.sort((a, b) => a.rate - b.rate).slice(0, 5).map(g =
 console.log("staff", staffPresence(), leaveRequests().map(l => `${l.staff.name}:${l.status}`).join(", "));
 const t1 = Date.now();
 const L = ledger();
-console.log("ledger ms", Date.now() - t1, "annual", rupeesCompact(L.annualTotal), "billed", rupeesCompact(L.billed), "collected", rupeesCompact(L.collected), "overdue", rupeesCompact(L.overdue), "dueNow", rupeesCompact(L.dueNow), "defaulters", L.defaulters.length);
-console.log("months", L.months.map(m => rupeesCompact(m.collected)).join(" "));
-console.log("modes", Object.entries(L.modes).map(([k, v]) => `${k}:${rupeesCompact(v)}`).join(" "));
+console.log("ledger ms", Date.now() - t1, "annual", dollarsCompact(L.annualTotal), "billed", dollarsCompact(L.billed), "collected", dollarsCompact(L.collected), "overdue", dollarsCompact(L.overdue), "dueNow", dollarsCompact(L.dueNow), "defaulters", L.defaulters.length);
+console.log("months", L.months.map(m => dollarsCompact(m.collected)).join(" "));
+console.log("modes", Object.entries(L.modes).map(([k, v]) => `${k}:${dollarsCompact(v)}`).join(" "));
 const ex = latestExam();
 console.log("exam", ex.name, toppers().map(r => `${r.student.name} ${r.student.classKey} ${r.pct.toFixed(1)}`).join(" | "));
 const cr = classResults("8-B");

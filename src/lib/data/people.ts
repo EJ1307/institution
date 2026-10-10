@@ -182,7 +182,7 @@ function buildStudents(): Student[] {
     kids.forEach((k, i) => {
       k.roll = i + 1;
       if (!k.id) k.id = `S${String(serial).padStart(4, "0")}`;
-      k.admissionNo = `AIS/${k.joinedYear}/${String(1000 + serial * 7 % 9000).padStart(4, "0")}`;
+      k.admissionNo = `LA/${k.joinedYear}/${String(1000 + serial * 7 % 9000).padStart(4, "0")}`;
       if (!k.parentId) k.parentId = `P-${String(20000 + serial)}`;
       serial++;
     });
@@ -255,7 +255,7 @@ function buildStaff(): Staff[] {
       joinedYear,
       experience: nowYear - joinedYear + r.int(1, 9),
       phone: phone(r),
-      email: `${nm.first}.${nm.last}`.toLowerCase().replace(/[^a-z.]/g, "") + "@amaltas.edu.in",
+      email: `${nm.first}.${nm.last}`.toLowerCase().replace(/[^a-z.]/g, "") + "@laburnumacademy.org",
     });
   };
 

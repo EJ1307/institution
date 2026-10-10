@@ -87,7 +87,6 @@ export function IdCardDialog({ student: s, open, onClose, medical }: { student: 
                 <div className="min-w-0">
                   <div className="title-serif truncate text-[13px] leading-tight font-semibold">{brand.school}</div>
                   <div className="truncate text-[9px] tracking-[0.02em] text-white/60">{brand.city}</div>
-                  <div className="truncate text-[9px] tracking-[0.02em] text-white/60">Affiliated to CBSE, New Delhi</div>
                 </div>
               </div>
               <div className="absolute inset-x-0 bottom-0 h-[3px] bg-accent" />
@@ -167,14 +166,14 @@ export function IdCardDialog({ student: s, open, onClose, medical }: { student: 
                 <p className="tnum text-[#777B81]">
                   {route.bus} · attendant {route.attendant}
                 </p>
-                <p className="tnum text-[#777B81]">Transport desk +91 124 4938 210</p>
+                <p className="text-[#777B81]">Transport desk · transport@laburnumacademy.org</p>
               </>
             )}
             <div className="mt-auto rounded-lg bg-[#F6F5F1] px-3 py-2.5">
               <div className="text-[8.5px] font-semibold tracking-[0.12em] text-[#777B81] uppercase">If found, please return to</div>
               <p className="mt-1 font-medium text-[#17191C]">{brand.school}</p>
-              <p>{brand.city}, Haryana 122011</p>
-              <p className="tnum">+91 124 4938 200 · office@amaltas.edu.in</p>
+              <p>{brand.city}</p>
+              <p className="tnum">office@laburnumacademy.org</p>
             </div>
             <p className="mt-2.5 text-[8.5px] leading-[12px] text-[#777B81]">
               Carry this card every day; it is scanned at the gate and on the school bus. Valid till 31 March {ay.startYear + 1}.

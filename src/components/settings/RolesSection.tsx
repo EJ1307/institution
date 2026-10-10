@@ -218,7 +218,7 @@ function InviteDialog({ open, onClose, onInvite }: { open: boolean; onClose: () 
   const [role, setRole] = useState<RoleId>("teacher");
   const [error, setError] = useState<string | null>(null);
   const submit = () => {
-    if (!/^[^\s@]+@amaltas\.edu\.in$/i.test(email.trim())) return setError("Use the person's school email — it must end in @amaltas.edu.in.");
+    if (!/^[^\s@]+@laburnumacademy\.org$/i.test(email.trim())) return setError("Use the person's school email — it must end in @laburnumacademy.org.");
     setError(null);
     onInvite(email.trim().toLowerCase(), role);
     setEmail("");
@@ -243,7 +243,7 @@ function InviteDialog({ open, onClose, onInvite }: { open: boolean; onClose: () 
     >
       <div className="flex flex-col gap-4">
         <Field label="School email" htmlFor={`${id}-email`} error={error}>
-          <Input id={`${id}-email`} type="email" value={email} onChange={(e) => (setEmail(e.target.value), setError(null))} placeholder="firstname.lastname@amaltas.edu.in" onKeyDown={(e) => e.key === "Enter" && submit()} />
+          <Input id={`${id}-email`} type="email" value={email} onChange={(e) => (setEmail(e.target.value), setError(null))} placeholder="firstname.lastname@laburnumacademy.org" onKeyDown={(e) => e.key === "Enter" && submit()} />
         </Field>
         <Field label="Role" htmlFor={`${id}-role`}>
           <Select id={`${id}-role`} value={role} onChange={(e) => setRole(e.target.value as RoleId)}>

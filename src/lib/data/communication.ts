@@ -67,7 +67,7 @@ export function notices(): Notice[] {
     {
       id: "N4",
       title: "Quarter 3 fee instalment reminder",
-      body: "The Quarter 3 instalment (October–December) is due on the 10th. Pay through the portal by UPI, card or net banking — receipts are generated instantly. A late fee of ₹500 applies after 15 days.",
+      body: "The Quarter 3 instalment (October–December) is due on the 10th. Pay through the portal by UPI, card or net banking — receipts are generated instantly. A late fee of $50 applies after 15 days.",
       audience: "All parents",
       category: "Fees",
       author: "Accounts office",

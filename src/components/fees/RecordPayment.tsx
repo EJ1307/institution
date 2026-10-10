@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Check, IndianRupee } from "lucide-react";
+import { ArrowLeft, Check, DollarSign } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Field, Input, SearchInput, Select } from "@/components/ui/forms";
 import { Dialog, useToast } from "@/components/ui/overlay";
@@ -8,7 +8,7 @@ import { Avatar, Badge, Button, cn } from "@/components/ui/primitives";
 import { feeAccount, ledger, type Instalment, type PaymentMode } from "@/lib/data/fees";
 import { students, type Student } from "@/lib/data/people";
 import { classLabel } from "@/lib/data/school";
-import { fmtDay, number, rupees } from "@/lib/format";
+import { fmtDay, number, dollars } from "@/lib/format";
 import { useAppState } from "@/lib/store";
 import { invoiceDate, recordPayment } from "./lib";
 
@@ -74,7 +74,7 @@ export function RecordPaymentDialog({
   const ins = account?.instalments.find((i) => i.id === insId) ?? null;
   const modeDef = OFFICE_MODES.find((m) => m.value === mode)!;
   const amt = Number(amount.replace(/[^\d]/g, ""));
-  const amountError = !ins ? null : !amt ? "Enter the amount received" : amt < ins.amount ? `Part payments aren't accepted — collect ${rupees(ins.amount)} for ${ins.label}.` : amt > ins.amount ? `That's more than the instalment. Collect exactly ${rupees(ins.amount)}.` : null;
+  const amountError = !ins ? null : !amt ? "Enter the amount received" : amt < ins.amount ? `Part payments aren't accepted — collect ${dollars(ins.amount)} for ${ins.label}.` : amt > ins.amount ? `That's more than the instalment. Collect exactly ${dollars(ins.amount)}.` : null;
   const refError = modeDef.required && reference.trim().length < 4 ? `Enter the ${modeDef.ref.toLowerCase()}` : null;
 
   const submit = () => {
@@ -83,7 +83,7 @@ export function RecordPaymentDialog({
     setSaving(true);
     setTimeout(() => {
       const { receipt } = recordPayment({ student, instalment: ins, mode, reference: reference.trim(), source: "office" });
-      toast({ title: `Receipt ${receipt} issued`, body: `${rupees(ins.amount)} from ${student.name} (${classLabel(student.grade, student.section)}) for ${ins.label} · ${mode}` });
+      toast({ title: `Receipt ${receipt} issued`, body: `${dollars(ins.amount)} from ${student.name} (${classLabel(student.grade, student.section)}) for ${ins.label} · ${mode}` });
       setSaving(false);
       onClose();
       onRecorded?.(student, ins.id);
@@ -102,7 +102,7 @@ export function RecordPaymentDialog({
             Cancel
           </Button>
           <Button variant="primary" onClick={submit} disabled={!student || !ins} loading={saving}>
-            {ins ? `Record ${rupees(ins.amount)}` : "Record payment"}
+            {ins ? `Record ${dollars(ins.amount)}` : "Record payment"}
           </Button>
         </>
       }
@@ -159,9 +159,9 @@ export function RecordPaymentDialog({
                   ))}
                 </Select>
               </Field>
-              <Field label="Amount received" htmlFor="rp-amount" error={tried ? amountError : null} hint={ins.lateFee ? `Includes ${rupees(ins.lateFee)} late fee` : undefined}>
+              <Field label="Amount received" htmlFor="rp-amount" error={tried ? amountError : null} hint={ins.lateFee ? `Includes ${dollars(ins.lateFee)} late fee` : undefined}>
                 <div className="relative">
-                  <IndianRupee className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted" aria-hidden />
+                  <DollarSign className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted" aria-hidden />
                   <Input id="rp-amount" inputMode="numeric" value={amount ? number(amt) : ""} onChange={(e) => setAmount(e.target.value)} className="tnum pl-7" />
                 </div>
               </Field>
@@ -189,9 +189,9 @@ function StudentOption({ student: s, onPick }: { student: Student; onPick: () =>
           </span>
         </span>
         {acc.overdue > 0 ? (
-          <span className="tnum text-[12.5px] font-semibold text-bad">{rupees(acc.overdue)} overdue</span>
+          <span className="tnum text-[12.5px] font-semibold text-bad">{dollars(acc.overdue)} overdue</span>
         ) : acc.outstanding > 0 ? (
-          <span className="tnum text-[12.5px] font-medium text-ink-2">{rupees(acc.outstanding)} due</span>
+          <span className="tnum text-[12.5px] font-medium text-ink-2">{dollars(acc.outstanding)} due</span>
         ) : (
           <span className="text-[12px] text-muted">Paid up</span>
         )}
@@ -225,13 +225,13 @@ function InstalmentOption({ ins, selected, onPick }: { ins: Instalment; selected
             {ins.status === "paid" ? `Paid ${fmtDay(ins.paidOn!)}` : ins.status === "upcoming" ? `Invoice on ${fmtDay(invoiceDate(ins.due))}` : `Due ${fmtDay(ins.due)}`}
           </span>
           {ins.status === "overdue" ? (
-            <Badge tone="bad">{rupees(ins.amount)}</Badge>
+            <Badge tone="bad">{dollars(ins.amount)}</Badge>
           ) : ins.status === "due" ? (
-            <span className="tnum font-semibold text-ink">{rupees(ins.amount)}</span>
+            <span className="tnum font-semibold text-ink">{dollars(ins.amount)}</span>
           ) : ins.status === "paid" ? (
             <Badge tone="good">Paid</Badge>
           ) : (
-            <span className="tnum text-muted">{rupees(ins.amount)}</span>
+            <span className="tnum text-muted">{dollars(ins.amount)}</span>
           )}
         </span>
       </span>

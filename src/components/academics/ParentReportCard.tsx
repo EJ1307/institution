@@ -156,9 +156,9 @@ function MarksReport({ child }: { child: Student }) {
               <Crest size={56} />
               <div className="min-w-0">
                 <p className="title-serif text-[20px] leading-tight font-semibold text-ink sm:text-[22px]">{brand.school}</p>
-                <p className="mt-0.5 text-[12px] text-muted">{brand.city}, Haryana · Affiliated to CBSE, New Delhi</p>
+                <p className="mt-0.5 text-[12px] text-muted">{brand.city}</p>
                 <p className="mt-0.5 text-[12px] text-ink-2">
-                  {brand.motto} <span className="text-muted">· {brand.mottoTranslation}</span>
+                  {brand.motto}{brand.mottoTranslation && <span className="text-muted"> · {brand.mottoTranslation}</span>}
                 </p>
               </div>
             </div>

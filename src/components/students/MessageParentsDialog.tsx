@@ -9,7 +9,7 @@ import { schoolDaysBack } from "@/lib/data/calendar";
 import { feeAccount } from "@/lib/data/fees";
 import type { Student } from "@/lib/data/people";
 import { classLabel } from "@/lib/data/school";
-import { fmtDay, rupees } from "@/lib/format";
+import { fmtDay, dollars } from "@/lib/format";
 import { useBrand, useSession } from "@/lib/session";
 
 type Channel = "app" | "whatsapp" | "email";
@@ -40,7 +40,7 @@ export function MessageParentsDialog({ student: s, open, onClose, canFees }: { s
       case "fees": {
         const acc = feeAccount(s);
         return acc.nextDue
-          ? `Dear Parent, ${acc.nextDue.label} fees of ${rupees(acc.nextDue.amount)} for ${first} (${classLabel(s.grade, s.section)}) are due on ${fmtDay(acc.nextDue.due)}. You can pay by UPI, card or net banking in the app. — Accounts, ${brand.short}`
+          ? `Dear Parent, ${acc.nextDue.label} fees of ${dollars(acc.nextDue.amount)} for ${first} (${classLabel(s.grade, s.section)}) are due on ${fmtDay(acc.nextDue.due)}. You can pay by UPI, card or net banking in the app. — Accounts, ${brand.short}`
           : `Dear Parent, thank you — ${first}'s fees for this year are paid up to date. — Accounts, ${brand.short}`;
       }
       case "meeting":

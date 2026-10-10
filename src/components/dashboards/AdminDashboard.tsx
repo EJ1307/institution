@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  AlertTriangle, ArrowRight, Bus, CalendarClock, ClipboardCheck, Download, IndianRupee, Megaphone, UserPlus, UsersRound,
+  AlertTriangle, ArrowRight, Bus, CalendarClock, ClipboardCheck, Download, DollarSign, Megaphone, UserPlus, UsersRound,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,7 +24,7 @@ import { ledger, PAYMENT_MODES } from "@/lib/data/fees";
 import { students } from "@/lib/data/people";
 import { GRADES, classLabel } from "@/lib/data/school";
 import { busStatus, ROUTES } from "@/lib/data/transport";
-import { fmtDay, fmtMonth, fmtWeekday, fmtWeekdayLong, greeting, number, percent, plural, relativeDays, rupees, rupeesCompact } from "@/lib/format";
+import { fmtDay, fmtMonth, fmtWeekday, fmtWeekdayLong, greeting, number, percent, plural, relativeDays, dollars, dollarsCompact } from "@/lib/format";
 import { useBrand, useSession } from "@/lib/session";
 import { useAppState } from "@/lib/store";
 
@@ -91,7 +91,7 @@ export function AdminDashboard() {
           <>
             <Button
               variant="secondary"
-              onClick={() => toast({ title: "Daily report is being prepared", body: "A PDF will be emailed to principal@amaltas.edu.in in a minute.", tone: "info" })}
+              onClick={() => toast({ title: "Daily report is being prepared", body: "A PDF will be emailed to principal@laburnumacademy.org in a minute.", tone: "info" })}
             >
               <Download /> Daily report
             </Button>
@@ -115,8 +115,8 @@ export function AdminDashboard() {
         <Stat
           href="/fees"
           label={`Fees collected · ${ay.label}`}
-          value={rupeesCompact(fees.collected)}
-          sub={<span className="tnum">{percent(collectedPct, 0)} of {rupeesCompact(fees.billed)} billed · {rupeesCompact(fees.overdue)} overdue</span>}
+          value={dollarsCompact(fees.collected)}
+          sub={<span className="tnum">{percent(collectedPct, 0)} of {dollarsCompact(fees.billed)} billed · {dollarsCompact(fees.overdue)} overdue</span>}
         />
         <Stat
           href="/staff"
@@ -197,9 +197,9 @@ export function AdminDashboard() {
             )}
             <Attention
               tone="bad"
-              icon={<IndianRupee />}
+              icon={<DollarSign />}
               title={`${plural(fees.defaulters.length, "family", "families")} overdue on fees`}
-              body={`${rupees(fees.overdue)} is past its due date.`}
+              body={`${dollars(fees.overdue)} is past its due date.`}
               action={<ButtonLink href="/fees?tab=overdue" size="sm" variant="secondary">Review</ButtonLink>}
             />
             {atRisk.length > 0 && (
@@ -337,8 +337,8 @@ export function AdminDashboard() {
               ]}
               stacked
               maxBar={56}
-              yFormat={(n) => rupeesCompact(n, 0)}
-              valueFormat={(n) => rupeesCompact(n)}
+              yFormat={(n) => dollarsCompact(n, 0)}
+              valueFormat={(n) => dollarsCompact(n)}
               height={232}
             />
           </CardBody>
@@ -352,7 +352,7 @@ export function AdminDashboard() {
             </div>
             <StackedBar
               segments={PAYMENT_MODES.map((m, i) => ({ label: m, value: fees.modes[m], color: [SERIES.s1, SERIES.s3, SERIES.s2, SERIES.s4, "#9A968C"][i] }))}
-              format={(n) => rupeesCompact(n)}
+              format={(n) => dollarsCompact(n)}
               columns={1}
             />
           </CardBody>

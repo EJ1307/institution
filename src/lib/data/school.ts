@@ -169,14 +169,14 @@ export type House = (typeof HOUSES)[number]["id"];
 
 export function annualTuition(grade: GradeId): number {
   const order = GRADE_BY_ID[grade].order;
-  if (order <= 2) return 1_32_000;
-  if (order <= 7) return 1_58_000;
-  if (order <= 10) return 1_74_000;
-  if (order <= 12) return 1_86_000;
-  return 2_04_000;
+  if (order <= 2) return 13_200;
+  if (order <= 7) return 15_800;
+  if (order <= 10) return 17_400;
+  if (order <= 12) return 18_600;
+  return 20_400;
 }
 
-export const TRANSPORT_QUARTERLY = 10_800;
+export const TRANSPORT_QUARTERLY = 1_080;
 
 export const INSTALMENTS = [
   { id: "Q1", label: "Quarter 1", month: 3, day: 10, covers: "Apr–Jun" },

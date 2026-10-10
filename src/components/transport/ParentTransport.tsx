@@ -10,7 +10,7 @@ import { isoDate, isSchoolDay, nextSchoolDay, schoolDaysBack, today } from "@/li
 import type { Student } from "@/lib/data/people";
 import { TRANSPORT_QUARTERLY } from "@/lib/data/school";
 import { ROUTE_BY_ID, routeForLocality, type Route } from "@/lib/data/transport";
-import { fmtTime, fmtWeekday, rupees } from "@/lib/format";
+import { fmtTime, fmtWeekday, dollars } from "@/lib/format";
 import { useChild } from "@/lib/session";
 import { setState, useAppState } from "@/lib/store";
 import { atMinutes, busDetails, clock, etaAt, liveStatus, onRoad, runLog, runWindow, stopIndexFor, toMin, useTicker, type Live, type Run } from "./live";
@@ -379,7 +379,7 @@ function NoTransport({ child }: { child: Student }) {
         title={`${child.firstName} isn't on a school bus route`}
         body={
           route
-            ? `Route ${route.id} (${route.name}) serves ${child.locality}. The bus costs ${rupees(TRANSPORT_QUARTERLY)} a quarter, billed with fees, and a seat can start from the next quarter.`
+            ? `Route ${route.id} (${route.name}) serves ${child.locality}. The bus costs ${dollars(TRANSPORT_QUARTERLY)} a quarter, billed with fees, and a seat can start from the next quarter.`
             : `No route covers ${child.locality} yet. The transport desk keeps a waiting list and adds stops each April.`
         }
         action={

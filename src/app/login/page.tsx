@@ -70,15 +70,13 @@ export default function LoginPage() {
           <Crest size={44} />
           <div>
             <div className="title-serif text-[17px] leading-tight font-semibold">{brand.school}</div>
-            <div className="text-[12px] text-white/55">{brand.city} · Affiliated to CBSE</div>
+            <div className="text-[12px] text-white/55">{brand.city}</div>
           </div>
         </div>
 
         <div className="relative hidden flex-1 flex-col justify-center px-12 lg:flex">
-          <p className="text-[34px] leading-none text-accent" lang="sa" style={{ fontFamily: "'Tiro Devanagari Hindi', serif" }}>
-            {brand.motto}
-          </p>
-          <p className="mt-3 text-[13px] tracking-[0.04em] text-white/55 italic">“{brand.mottoTranslation}”</p>
+          <p className="title-serif text-[34px] leading-tight text-accent italic">{brand.motto}</p>
+          {brand.mottoTranslation && <p className="mt-3 text-[13px] tracking-[0.04em] text-white/55 italic">“{brand.mottoTranslation}”</p>}
           <h1 className="title-serif mt-14 max-w-[460px] text-[40px] leading-[1.08] font-medium tracking-[-0.02em] text-white">
             Everything about school, <span className="text-white/55">in one quiet place.</span>
           </h1>
@@ -90,7 +88,7 @@ export default function LoginPage() {
         <div className="relative hidden items-center justify-between gap-6 border-t border-white/10 px-12 py-6 text-[12px] text-white/50 lg:flex">
           <span>Academic year {ay.label}</span>
           <span className="flex items-center gap-1.5">
-            <LockKeyhole className="size-3.5" /> Encrypted · data stored in India
+            <LockKeyhole className="size-3.5" /> Encrypted · role-based access
           </span>
         </div>
       </aside>
@@ -99,7 +97,7 @@ export default function LoginPage() {
       <main className="flex flex-1 items-center justify-center px-5 py-10 sm:px-8 lg:py-16">
         <div className="w-full max-w-[420px]">
           <h2 className="title-serif text-[30px] leading-tight font-semibold">Sign in</h2>
-          <p className="mt-1.5 text-[14px] text-muted">to the {brand.short} portal</p>
+          <p className="mt-1.5 text-[14px] text-muted">to the {brand.school} portal</p>
 
           <div role="radiogroup" aria-label="Sign in as" className="mt-8 grid grid-cols-3 gap-2">
             {ROLES.map((r) => {

@@ -91,7 +91,7 @@ export function AddStudentDialog({ open, onClose }: { open: boolean; onClose: ()
     setTimeout(() => {
       const [g, sec] = f.classKey.split("-");
       const roll = studentsInClass(f.classKey).length + 1;
-      const adm = `AIS/${ay.startYear}/${String(1600 + Math.floor(Math.random() * 300)).padStart(4, "0")}`;
+      const adm = `LA/${ay.startYear}/${String(1600 + Math.floor(Math.random() * 300)).padStart(4, "0")}`;
       toast({
         title: `${f.first.trim()} ${f.last.trim()} added to ${classLabel(g as never, sec)}`,
         body: `Admission no. ${adm} · Roll ${roll}. Login details have been sent to ${f.guardian.trim().split(" ")[0]} on +91 ${f.phone.replace(/\D/g, "").slice(-10).replace(/(\d{5})(\d{5})/, "$1 $2")}.`,

@@ -105,7 +105,7 @@ export function StaffSheet({ person, presence, onClose }: { person: Staff | null
           )}
 
           <dl className="divide-y divide-line border-y border-line">
-            <KeyValue k="Employee ID" v={<span className="tnum">AIS/EMP/{String(staff().findIndex((x) => x.id === person.id) + 1041).padStart(4, "0")}</span>} />
+            <KeyValue k="Employee ID" v={<span className="tnum">LA/EMP/{String(staff().findIndex((x) => x.id === person.id) + 1041).padStart(4, "0")}</span>} />
             <KeyValue k="Qualification" v={person.qualification} />
             <KeyValue k="At the school since" v={`${person.joinedYear} · ${plural(yearsHere, "year")}`} />
             <KeyValue k="Total experience" v={plural(person.experience, "year")} />

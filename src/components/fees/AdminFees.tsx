@@ -14,7 +14,7 @@ import { academicYear, today } from "@/lib/data/calendar";
 import { ledger, PAYMENT_MODES } from "@/lib/data/fees";
 import type { Student } from "@/lib/data/people";
 import { GRADES, classLabel, type GradeId } from "@/lib/data/school";
-import { fmtDay, fmtMonth, number, percent, plural, rupees, rupeesCompact } from "@/lib/format";
+import { fmtDay, fmtMonth, number, percent, plural, dollars, dollarsCompact } from "@/lib/format";
 import { useAppState } from "@/lib/store";
 import { FeeStructure } from "./FeeStructure";
 import { Overdue } from "./Overdue";
@@ -94,24 +94,24 @@ export function AdminFees() {
         <Stat
           className="col-span-2 lg:col-span-1"
           label={`Collected · ${ay.label}`}
-          value={rupeesCompact(L.collected)}
-          sub={<span className="tnum">{rupeesCompact(thisMonth?.collected ?? 0)} in {fmtMonth(t)} · {number(monthReceipts)} receipts</span>}
+          value={dollarsCompact(L.collected)}
+          sub={<span className="tnum">{dollarsCompact(thisMonth?.collected ?? 0)} in {fmtMonth(t)} · {number(monthReceipts)} receipts</span>}
         />
-        <Stat label="Billed so far" value={rupeesCompact(L.billed)} sub={<span className="tnum">of {rupeesCompact(L.annualTotal)} for the year</span>} />
+        <Stat label="Billed so far" value={dollarsCompact(L.billed)} sub={<span className="tnum">of {dollarsCompact(L.annualTotal)} for the year</span>} />
         <Stat
           label="Collection rate"
           value={percent(rate)}
-          sub={<span className="tnum">{rupeesCompact(L.billed - L.collected)} billed, not yet in</span>}
+          sub={<span className="tnum">{dollarsCompact(L.billed - L.collected)} billed, not yet in</span>}
         />
         <Stat
           href="/fees?tab=overdue"
           label="Overdue"
-          value={<span className="text-bad">{rupeesCompact(L.overdue)}</span>}
+          value={<span className="text-bad">{dollarsCompact(L.overdue)}</span>}
           sub={`${plural(L.defaulters.length, "family", "families")} past due`}
         />
         <Stat
           label="Due now"
-          value={rupeesCompact(L.dueNow)}
+          value={dollarsCompact(L.dueNow)}
           sub={open ? `${open.id} · due ${fmtDay(open.due)}` : "Nothing open right now"}
         />
       </div>
@@ -147,8 +147,8 @@ export function AdminFees() {
                   categories={L.months.map((m) => fmtMonth(m.month))}
                   series={[{ id: "collected", label: "Collected", color: SERIES.s1, values: L.months.map((m) => m.collected) }]}
                   highlight={monthIdx >= 0 && monthIdx < 12 ? monthIdx : undefined}
-                  yFormat={(n) => rupeesCompact(n, 0)}
-                  valueFormat={(n) => rupeesCompact(n)}
+                  yFormat={(n) => dollarsCompact(n, 0)}
+                  valueFormat={(n) => dollarsCompact(n)}
                   height={240}
                 />
               </CardBody>
@@ -177,8 +177,8 @@ export function AdminFees() {
                   ]}
                   stacked
                   maxBar={40}
-                  yFormat={(n) => rupeesCompact(n, 0)}
-                  valueFormat={(n) => rupeesCompact(n)}
+                  yFormat={(n) => dollarsCompact(n, 0)}
+                  valueFormat={(n) => dollarsCompact(n)}
                   height={206}
                 />
               </CardBody>
@@ -190,13 +190,13 @@ export function AdminFees() {
 
             <div className="flex flex-col gap-4">
               <Card>
-                <CardHeader title="How families pay" description={`Share of ${rupeesCompact(L.collected)} collected this year`} />
+                <CardHeader title="How families pay" description={`Share of ${dollarsCompact(L.collected)} collected this year`} />
                 <CardBody>
                   <div className="mb-4 flex items-baseline gap-2">
                     <span className="text-[26px] leading-none font-semibold tracking-[-0.02em]">{percent(online / (L.collected || 1), 0)}</span>
                     <span className="text-[12.5px] text-muted">paid online — UPI, net banking and cards</span>
                   </div>
-                  <StackedBar segments={PAYMENT_MODES.map((m, i) => ({ label: m, value: L.modes[m], color: MODE_COLORS[i] }))} format={(n) => rupeesCompact(n)} columns={1} />
+                  <StackedBar segments={PAYMENT_MODES.map((m, i) => ({ label: m, value: L.modes[m], color: MODE_COLORS[i] }))} format={(n) => dollarsCompact(n)} columns={1} />
                 </CardBody>
               </Card>
               <Card>
@@ -218,7 +218,7 @@ export function AdminFees() {
                           {classLabel(a.student.grade, a.student.section)} · {a.instalments.filter((i) => i.status === "overdue").map((i) => i.id).join(" + ")}
                         </p>
                       </div>
-                      <span className="tnum text-[13px] font-semibold text-bad">{rupees(a.overdue)}</span>
+                      <span className="tnum text-[13px] font-semibold text-bad">{dollars(a.overdue)}</span>
                     </li>
                   ))}
                 </ul>
@@ -297,10 +297,10 @@ function ByClass({ onPick }: { onPick: (g: GradeId) => void }) {
             <Tr key={r.g.id} onClick={() => onPick(r.g.id)} tabIndex={0} onKeyDown={(e) => e.key === "Enter" && onPick(r.g.id)} className="[&>td]:h-10">
               <Td className="font-medium text-ink">{r.g.label}</Td>
               <Td align="right" className="text-ink-2">{number(r.students)}</Td>
-              <Td align="right" className="text-ink-2">{rupeesCompact(r.billed)}</Td>
-              <Td align="right" className="text-ink">{rupeesCompact(r.collected)}</Td>
+              <Td align="right" className="text-ink-2">{dollarsCompact(r.billed)}</Td>
+              <Td align="right" className="text-ink">{dollarsCompact(r.collected)}</Td>
               <Td align="right" className={cn(r.overdue > 0 ? "text-bad" : "text-faint")}>
-                {r.overdue > 0 ? rupeesCompact(r.overdue) : "—"}
+                {r.overdue > 0 ? dollarsCompact(r.overdue) : "—"}
               </Td>
               <Td align="right" className={cn(r.families > 0 ? "text-ink-2" : "text-faint")}>
                 {r.families || "—"}

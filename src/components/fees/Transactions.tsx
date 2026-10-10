@@ -10,7 +10,7 @@ import { Pagination, SortTh, Table, Td, Th, THead, Tr } from "@/components/ui/ta
 import { addDays, today } from "@/lib/data/calendar";
 import { PAYMENT_MODES, type PaymentMode, type Transaction } from "@/lib/data/fees";
 import { classLabel } from "@/lib/data/school";
-import { fmtDate, fmtTime, number, rupees, rupeesCompact } from "@/lib/format";
+import { fmtDate, fmtTime, number, dollars, dollarsCompact } from "@/lib/format";
 import { useAppState } from "@/lib/store";
 import { ReceiptSheet } from "./Receipt";
 import { receiptFor, type ReceiptData } from "./lib";
@@ -113,8 +113,8 @@ export function Transactions({ txns, focus, onFocusDone }: { txns: Transaction[]
           {mode !== "all" && ` by ${mode.toLowerCase() === "upi" ? "UPI" : mode.toLowerCase()}`}
         </span>
         <span>
-          Total <span className="tnum font-semibold text-ink">{rupees(total)}</span>
-          <span className="hidden sm:inline"> · {rupeesCompact(total)}</span>
+          Total <span className="tnum font-semibold text-ink">{dollars(total)}</span>
+          <span className="hidden sm:inline"> · {dollarsCompact(total)}</span>
         </span>
       </div>
 
@@ -172,7 +172,7 @@ export function Transactions({ txns, focus, onFocusDone }: { txns: Transaction[]
                     </Td>
                     <Td className="tnum whitespace-nowrap text-ink-2">{dateLabel(x.date, fresh ? new Date(p.at!) : null, t)}</Td>
                     <Td align="right" className="font-semibold text-ink">
-                      {rupees(x.amount)}
+                      {dollars(x.amount)}
                     </Td>
                   </Tr>
                 );

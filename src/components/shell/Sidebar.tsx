@@ -39,8 +39,8 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       <div className="flex items-center gap-3 px-5 pt-5 pb-6">
         <Crest size={38} />
         <div className="min-w-0">
-          <div className="title-serif truncate text-[15px] leading-tight font-semibold text-white">{brand.school.replace(/ International School$/, "")}</div>
-          <div className="truncate text-[11.5px] text-white/50">{brand.school.endsWith("International School") ? "International School" : brand.city}</div>
+          <div className="title-serif truncate text-[15px] leading-tight font-semibold text-white">{brand.school.replace(/ (International School|Academy)$/, "")}</div>
+          <div className="truncate text-[11.5px] text-white/50">{brand.school.match(/ (International School|Academy)$/)?.[1] ?? brand.city}</div>
         </div>
       </div>
 

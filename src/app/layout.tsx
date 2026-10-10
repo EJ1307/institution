@@ -8,7 +8,7 @@ import { brandBootScript, DEFAULT_BRAND } from "@/lib/brand";
 export const metadata: Metadata = {
   title: {
     default: `${DEFAULT_BRAND.school} · Portal`,
-    template: `%s · ${DEFAULT_BRAND.short} Portal`,
+    template: `%s · ${DEFAULT_BRAND.school}`,
   },
   description:
     "School operating system: attendance, fees, exams, admissions, transport and parent communication in one place.",
@@ -22,7 +22,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-IN" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: brandBootScript }} />
       </head>

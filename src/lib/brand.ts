@@ -16,7 +16,7 @@ export type BrandPreset = {
 };
 
 export const PRESETS: BrandPreset[] = [
-  { id: "amaltas", name: "Amaltas green", brand: "#1F6B50", deep: "#123D2F", soft: "#E6F0EA", accent: "#E3A82B" },
+  { id: "amaltas", name: "Laburnum green", brand: "#1F6B50", deep: "#123D2F", soft: "#E6F0EA", accent: "#E3A82B" },
   { id: "oxford", name: "Oxford blue", brand: "#264D8C", deep: "#152B52", soft: "#E6ECF6", accent: "#D9A74A" },
   { id: "maroon", name: "Heritage maroon", brand: "#8A2834", deep: "#4D141C", soft: "#F6E8EA", accent: "#D9A441" },
   { id: "teal", name: "Lagoon teal", brand: "#0F6C72", deep: "#0B3E42", soft: "#E1EFEF", accent: "#E9A23B" },
@@ -34,13 +34,14 @@ export type BrandConfig = {
 };
 
 export const DEFAULT_BRAND: BrandConfig = {
-  school: "Amaltas International School",
-  short: "AIS",
-  city: "Sector 57, Gurugram",
-  motto: "तमसो मा ज्योतिर्गमय",
-  mottoTranslation: "From darkness, lead us to light",
+  school: "Laburnum Academy",
+  short: "LA",
+  city: "Est. 1998",
+  motto: "From darkness, lead us to light",
+  // a motto in another language can carry its English here; an English one needs none
+  mottoTranslation: "",
   presetId: "amaltas",
-  product: "Kaksha",
+  product: "Campus",
 };
 
 export const BRAND_KEY = "kaksha.brand.v1";

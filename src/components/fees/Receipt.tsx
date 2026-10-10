@@ -8,7 +8,7 @@ import { Dialog } from "@/components/ui/overlay";
 import { Button, cn } from "@/components/ui/primitives";
 import { academicYear } from "@/lib/data/calendar";
 import { classLabel, GRADE_BY_ID } from "@/lib/data/school";
-import { fmtDate, fmtTime, rupees } from "@/lib/format";
+import { fmtDate, fmtTime, dollars } from "@/lib/format";
 import { useBrand } from "@/lib/session";
 import { amountInWords, type ReceiptData } from "./lib";
 
@@ -34,7 +34,7 @@ export function ReceiptDocument({ data, className }: { data: ReceiptData; classN
             <Crest size={40} />
             <div className="min-w-0">
               <p className="title-serif text-[16px] leading-tight font-semibold">{brand.school}</p>
-              <p className="mt-0.5 text-[11.5px] text-muted">{brand.city}, Haryana · Affiliated to CBSE, New Delhi</p>
+              <p className="mt-0.5 text-[11.5px] text-muted">{brand.city}</p>
             </div>
           </div>
           <div className="shrink-0 text-right">
@@ -66,14 +66,14 @@ export function ReceiptDocument({ data, className }: { data: ReceiptData; classN
                   <span className="text-ink">{r.label}</span>
                   {r.note && <span className="block text-[11.5px] text-muted">{r.note}</span>}
                 </td>
-                <td className="tnum py-2.5 text-right align-top whitespace-nowrap">{r.amount < 0 ? `−${rupees(-r.amount)}` : rupees(r.amount)}</td>
+                <td className="tnum py-2.5 text-right align-top whitespace-nowrap">{r.amount < 0 ? `−${dollars(-r.amount)}` : dollars(r.amount)}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr className="border-t-2 border-ink/80">
               <td className="pt-3 font-semibold">Total received</td>
-              <td className="tnum pt-3 text-right text-[15px] font-semibold whitespace-nowrap">{rupees(ins.amount)}</td>
+              <td className="tnum pt-3 text-right text-[15px] font-semibold whitespace-nowrap">{dollars(ins.amount)}</td>
             </tr>
           </tfoot>
         </table>
@@ -106,7 +106,7 @@ export function ReceiptDocument({ data, className }: { data: ReceiptData; classN
         </div>
 
         <p className="mt-6 border-t border-dashed border-line-strong pt-3 text-[10.5px] leading-relaxed text-muted">
-          Computer-generated receipt; no signature required. Tuition is exempt from GST. Keep this receipt for income-tax deduction under Section 80C. Queries: accounts@amaltas.edu.in
+          Computer-generated receipt; no signature required. Tuition is exempt from GST. Keep this receipt for income-tax deduction under Section 80C. Queries: accounts@laburnumacademy.org
         </p>
       </div>
     </article>

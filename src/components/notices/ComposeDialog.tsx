@@ -7,7 +7,7 @@ import { Field, Input, Segmented, Select, Switch, Textarea } from "@/components/
 import { Dialog, useToast } from "@/components/ui/overlay";
 import { Button, cn } from "@/components/ui/primitives";
 import { addDays, fromIso, isoDate, nextSchoolDay, today } from "@/lib/data/calendar";
-import { fmtTime, fmtWeekday, number, rupees } from "@/lib/format";
+import { fmtTime, fmtWeekday, number, dollars } from "@/lib/format";
 import { setState, type PostedNotice } from "@/lib/store";
 import { audienceLabel, CLASS_TARGETS, reachesStudent, recipientsFor, ROUTE_TARGETS, scopeFromKey, type AudienceKind } from "@/components/comms/audience";
 import { studentById, students } from "@/lib/data/people";
@@ -17,8 +17,8 @@ import { CATEGORIES, CHANNELS, type Channel } from "./model";
 
 const CHANNEL_META: Record<Channel, { icon: ReactNode; label: string; note: string }> = {
   App: { icon: <Bell />, label: "App push", note: "Free" },
-  SMS: { icon: <MessageSquareText />, label: "SMS", note: "₹0.20 each" },
-  WhatsApp: { icon: <MessageCircle />, label: "WhatsApp", note: "₹0.13 each" },
+  SMS: { icon: <MessageSquareText />, label: "SMS", note: "$0.01 each" },
+  WhatsApp: { icon: <MessageCircle />, label: "WhatsApp", note: "$0.005 each" },
   Email: { icon: <Mail />, label: "Email", note: "Free" },
 };
 
@@ -79,7 +79,7 @@ function ComposeForm({ mode, classKey, author, onDone }: { mode: Mode; classKey:
   const show = (k: keyof typeof errors) => (tried ? errors[k] : null);
 
   const billed = channels.filter((c) => c === "SMS" || c === "WhatsApp");
-  const cost = billed.reduce((a, c) => a + recipients.count * (c === "SMS" ? 0.2 : 0.13), 0);
+  const cost = billed.reduce((a, c) => a + recipients.count * (c === "SMS" ? 0.01 : 0.005), 0);
 
   const toggleChannel = (c: Channel) => setChannels((cs) => (cs.includes(c) ? cs.filter((x) => x !== c) : CHANNELS.filter((x) => x === c || cs.includes(x))));
 
@@ -268,7 +268,7 @@ function ComposeForm({ mode, classKey, author, onDone }: { mode: Mode; classKey:
               <p className="text-[12px] text-muted">
                 {cost > 0 ? (
                   <>
-                    About <span className="tnum font-medium text-ink-2">{cost >= 100 ? rupees(cost) : `₹${cost.toFixed(2)}`}</span> in SMS and WhatsApp charges.
+                    About <span className="tnum font-medium text-ink-2">{cost >= 100 ? dollars(cost) : `$${cost.toFixed(2)}`}</span> in SMS and WhatsApp charges.
                   </>
                 ) : (
                   "No messaging charges for app push and email."
@@ -395,7 +395,7 @@ function PhonePreview({ draft, screen, who }: { draft: Draft; screen: Screen; wh
             <div className="mt-6 w-full rounded-2xl bg-white/90 px-3 py-2.5 text-ink shadow-[0_8px_24px_-8px_rgb(0_0_0/0.35)]">
               <div className="flex items-center gap-1.5 text-[9.5px] text-muted">
                 <Crest size={13} />
-                <span className="font-semibold tracking-wide uppercase">Amaltas</span>
+                <span className="font-semibold tracking-wide uppercase">Laburnum</span>
                 <span className="ml-auto">now</span>
               </div>
               <p className="mt-1 truncate text-[11.5px] font-semibold">{title}</p>
@@ -413,7 +413,7 @@ function PhonePreview({ draft, screen, who }: { draft: Draft; screen: Screen; wh
             <div className="flex flex-col gap-1 p-3">
               <p className="text-center text-[9.5px] text-faint">Today {fmtTime(now)}</p>
               <p className="max-w-[88%] rounded-2xl rounded-bl-md bg-ink/[0.07] px-3 py-2 text-[11px] leading-snug text-ink">
-                Amaltas Intl School: {title}. Read more: kaksha.in/n/4K2P
+                Laburnum Academy: {title}. Read more: laburnumacademy.org/n/4K2P
               </p>
               <p className="mt-1 text-[9.5px] text-faint">SMS carries the title and a link, in one 160-character message.</p>
             </div>
@@ -425,7 +425,7 @@ function PhonePreview({ draft, screen, who }: { draft: Draft; screen: Screen; wh
             <div className="flex items-center gap-2 bg-[#f6f5f1] px-3 py-2">
               <Crest size={22} />
               <div className="min-w-0">
-                <p className="truncate text-[11px] font-semibold text-ink">Amaltas International School</p>
+                <p className="truncate text-[11px] font-semibold text-ink">Laburnum Academy</p>
                 <p className="text-[9px] text-muted">Business account</p>
               </div>
             </div>

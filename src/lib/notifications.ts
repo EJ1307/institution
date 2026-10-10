@@ -5,7 +5,7 @@ import { notices } from "./data/communication";
 import { feeAccount, ledger } from "./data/fees";
 import { studentById } from "./data/people";
 import { busStatus, ROUTE_BY_ID, ROUTES } from "./data/transport";
-import { fmtDay, plural, rupees } from "./format";
+import { fmtDay, plural, dollars } from "./format";
 import type { AppState, Role } from "./store";
 
 export type Notification = { id: string; title: string; body: string; href: string; tone: "bad" | "warn" | "info" | "good"; time: string };
@@ -18,7 +18,7 @@ export function notificationsFor(role: Role, st: AppState): Notification[] {
     const pending = leaveRequests().filter((l) => l.status === "pending");
     if (pending.length) out.push({ id: "n-leave", title: `${plural(pending.length, "leave request")} awaiting approval`, body: pending.slice(0, 2).map((l) => `${l.staff.title} ${l.staff.name}`).join(", ") + (pending.length > 2 ? "…" : ""), href: "/staff", tone: "info", time: "Today" });
     const L = ledger();
-    out.push({ id: "n-overdue", title: `${plural(L.defaulters.length, "family", "families")} with overdue fees`, body: `${rupees(L.overdue)} outstanding beyond the due date.`, href: "/fees", tone: "bad", time: "Today" });
+    out.push({ id: "n-overdue", title: `${plural(L.defaulters.length, "family", "families")} with overdue fees`, body: `${dollars(L.overdue)} outstanding beyond the due date.`, href: "/fees", tone: "bad", time: "Today" });
     const late = ROUTES.map((r) => ({ r, s: busStatus(r, new Date()) })).filter((x) => x.s.delay > 2 && (x.s.phase === "morning" || x.s.phase === "afternoon"));
     for (const x of late.slice(0, 1)) out.push({ id: `n-bus-${x.r.id}`, title: `Bus ${x.r.id} running ${x.s.delay} min late`, body: `${x.r.name} · ${x.r.bus}`, href: "/transport", tone: "warn", time: "Live" });
     const c = classDay("10-C", d);
@@ -33,7 +33,7 @@ export function notificationsFor(role: Role, st: AppState): Notification[] {
     const child = studentById(st.childId);
     if (child) {
       const acc = feeAccount(child);
-      if (acc.nextDue) out.push({ id: `p-fee-${child.id}`, title: `${acc.nextDue.label} fee due ${fmtDay(acc.nextDue.due)}`, body: `${rupees(acc.nextDue.amount)} for ${child.firstName}. Pay securely in a few taps.`, href: "/fees", tone: acc.nextDue.status === "overdue" ? "bad" : "warn", time: "Reminder" });
+      if (acc.nextDue) out.push({ id: `p-fee-${child.id}`, title: `${acc.nextDue.label} fee due ${fmtDay(acc.nextDue.due)}`, body: `${dollars(acc.nextDue.amount)} for ${child.firstName}. Pay securely in a few taps.`, href: "/fees", tone: acc.nextDue.status === "overdue" ? "bad" : "warn", time: "Reminder" });
       const m = markFor(child, d);
       if (m) out.push({ id: `p-att-${child.id}`, title: m === "A" ? `${child.firstName} was marked absent` : `${child.firstName} reached school`, body: m === "A" ? "If this is unexpected, please call the front office." : `Marked ${m === "L" ? "late" : "present"} at ${m === "L" ? "8:14" : "7:52"} am`, href: "/attendance", tone: m === "A" ? "bad" : "good", time: "Today" });
       const route = child.routeId ? ROUTE_BY_ID[child.routeId] : null;

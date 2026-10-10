@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Bus, CalendarDays, Check, ChevronRight, IndianRupee, MessageSquareText, NotebookPen, Phone } from "lucide-react";
+import { ArrowRight, Bus, CalendarDays, Check, ChevronRight, DollarSign, MessageSquareText, NotebookPen, Phone } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { BarList, SERIES } from "@/components/charts/misc";
@@ -14,7 +14,7 @@ import { feeAccount } from "@/lib/data/fees";
 import { classTeacher } from "@/lib/data/people";
 import { classLabel, hasMarks } from "@/lib/data/school";
 import { busStatus, ROUTE_BY_ID } from "@/lib/data/transport";
-import { fmtClock, fmtDay, fmtWeekday, fmtWeekdayLong, greeting, percent, relativeDays, rupees } from "@/lib/format";
+import { fmtClock, fmtDay, fmtWeekday, fmtWeekdayLong, greeting, percent, relativeDays, dollars } from "@/lib/format";
 import { stopIndexFor } from "@/components/transport/live";
 import { useChild } from "@/lib/session";
 import { getState, setState, useAppState } from "@/lib/store";
@@ -97,19 +97,19 @@ export function ParentDashboard() {
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Fees */}
         <Card className="lg:order-1">
-          <CardHeader title="Fees" icon={<IndianRupee />} action={<ButtonLink href="/fees" variant="ghost" size="sm">Details</ButtonLink>} />
+          <CardHeader title="Fees" icon={<DollarSign />} action={<ButtonLink href="/fees" variant="ghost" size="sm">Details</ButtonLink>} />
           <div className="px-5 pb-5">
             {fees.nextDue ? (
               <>
                 <p className="text-[12.5px] text-muted">
                   {fees.nextDue.label} · {fees.nextDue.covers}
                 </p>
-                <p className="mt-1 text-[28px] leading-none font-semibold tracking-[-0.02em]">{rupees(fees.nextDue.amount)}</p>
+                <p className="mt-1 text-[28px] leading-none font-semibold tracking-[-0.02em]">{dollars(fees.nextDue.amount)}</p>
                 <p className={cn("mt-2 text-[12.5px] font-medium", fees.nextDue.status === "overdue" ? "text-bad" : "text-warn")}>
                   {fees.nextDue.status === "overdue" ? `Overdue since ${fmtDay(fees.nextDue.due)}` : `Due ${relativeDays(fees.nextDue.due, today()).toLowerCase()} · ${fmtDay(fees.nextDue.due)}`}
                 </p>
                 <ButtonLink href="/fees?pay=1" variant="primary" size="lg" className="mt-4 w-full">
-                  Pay {rupees(fees.nextDue.amount)}
+                  Pay {dollars(fees.nextDue.amount)}
                 </ButtonLink>
                 <p className="mt-2.5 text-center text-[11.5px] text-muted">UPI, cards or net banking · instant receipt</p>
               </>

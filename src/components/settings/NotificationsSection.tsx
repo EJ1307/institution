@@ -5,13 +5,13 @@ import { useId } from "react";
 import { Select, Switch } from "@/components/ui/forms";
 import { useToast } from "@/components/ui/overlay";
 import { Card, CardHeader, cn } from "@/components/ui/primitives";
-import { number, rupees } from "@/lib/format";
+import { number, dollars } from "@/lib/format";
 import { setState, useAppState } from "@/lib/store";
 import { InfoRow, SettingRow } from "./rows";
 
 const CHANNELS = [
-  { id: "sms", label: "SMS", cost: 0.2 },
-  { id: "whatsapp", label: "WhatsApp", cost: 0.12 },
+  { id: "sms", label: "SMS", cost: 0.01 },
+  { id: "whatsapp", label: "WhatsApp", cost: 0.005 },
   { id: "email", label: "Email", cost: 0 },
   { id: "push", label: "App push", cost: 0 },
 ] as const;
@@ -89,7 +89,7 @@ export function NotificationsSection() {
             <div className="text-[12px] font-medium text-muted">{c.label} · per month</div>
             <div className="tnum mt-1 text-[20px] leading-tight font-semibold text-ink">≈ {number(Math.round(volume(c.id) / 10) * 10)}</div>
             <div className="mt-1 text-[12px] text-muted">
-              {c.id === "sms" ? `${rupees(volume("sms") * c.cost)} at ₹0.20 each` : c.id === "whatsapp" ? `${rupees(volume("whatsapp") * c.cost)} at ₹0.12 each` : c.id === "email" ? "Included in the plan" : "Free · 92% of parents use the app"}
+              {c.id === "sms" ? `${dollars(volume("sms") * c.cost)} at $0.01 each` : c.id === "whatsapp" ? `${dollars(volume("whatsapp") * c.cost)} at $0.005 each` : c.id === "email" ? "Included in the plan" : "Free · 92% of parents use the app"}
             </div>
           </div>
         ))}
@@ -98,7 +98,7 @@ export function NotificationsSection() {
       <Card>
         <CardHeader
           title="What families and staff hear about"
-          description={`Turn channels on or off per event. Estimated messaging cost at these settings: ${rupees(cost)} a month.`}
+          description={`Turn channels on or off per event. Estimated messaging cost at these settings: ${dollars(cost)} a month.`}
         />
         <MobileList isOn={isOn} toggle={toggle} />
         <div className="scroll-thin hidden overflow-x-auto sm:block">

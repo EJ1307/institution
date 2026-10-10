@@ -42,11 +42,11 @@ export function ago(iso: string | Date, now: Date) {
 
 // ——— Receipts ————————————————————————————————————————————————————
 
-/** Next receipt number for a payment taken in the demo: AIS/2026-27/5xxxx. */
+/** Next receipt number for a payment taken in the demo: LA/2026-27/5xxxx. */
 export function nextReceiptNo() {
   const ay = academicYear(today());
   const taken = Object.values(getState().payments).length;
-  return `AIS/${ay.label.replace("–", "-")}/5${String(2140 + taken + 1).padStart(4, "0")}`;
+  return `LA/${ay.label.replace("–", "-")}/5${String(2140 + taken + 1).padStart(4, "0")}`;
 }
 
 /** A plausible bank reference for each payment mode. */
@@ -134,7 +134,7 @@ function makeStableRef(mode: PaymentMode, seed: string) {
   }
 }
 
-// ——— Amount in words (Indian system) ————————————————————————————————
+// ——— Amount in words ————————————————————————————————————————————————
 
 const ONES = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
 const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
@@ -150,22 +150,21 @@ function threeDigits(n: number) {
   return [h ? `${ONES[h]} hundred` : "", rest ? twoDigits(rest) : ""].filter(Boolean).join(" ");
 }
 
-/** 54300 → "Rupees fifty-four thousand three hundred only" */
+/** 5430 → "Five thousand four hundred thirty dollars only" */
 export function amountInWords(amount: number) {
   let n = Math.round(amount);
-  if (n === 0) return "Rupees zero only";
-  const crore = Math.floor(n / 1e7);
-  n %= 1e7;
-  const lakh = Math.floor(n / 1e5);
-  n %= 1e5;
+  if (n === 0) return "Zero dollars only";
+  const million = Math.floor(n / 1e6);
+  n %= 1e6;
   const thousand = Math.floor(n / 1000);
   n %= 1000;
-  const parts = [
-    crore ? `${twoDigits(crore)} crore` : "",
-    lakh ? `${twoDigits(lakh)} lakh` : "",
-    thousand ? `${twoDigits(thousand)} thousand` : "",
+  const words = [
+    million ? `${threeDigits(million)} million` : "",
+    thousand ? `${threeDigits(thousand)} thousand` : "",
     n ? threeDigits(n) : "",
-  ].filter(Boolean);
-  return `Rupees ${parts.join(" ")} only`;
+  ]
+    .filter(Boolean)
+    .join(" ");
+  return `${words.charAt(0).toUpperCase()}${words.slice(1)} dollars only`;
 }
 
